@@ -1,12 +1,15 @@
 package pashapps.spotifystreamer;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -20,6 +23,7 @@ public class ArtistAdapter extends BaseAdapter{
 
     private Context mContext;
     private ArtistsPager mResults;
+    private int mCount;
 
 
     public ArtistAdapter(Context context, ArtistsPager results) {
@@ -28,9 +32,13 @@ public class ArtistAdapter extends BaseAdapter{
 
     }
 
+    public void setCount(int count){
+        mCount = count;
+    }
+
     @Override
     public int getCount() {
-        if (mResults==null) {
+        if (mResults==null || mCount==0) {
             return 0;
         } else {
             return mResults.artists.items.size();
@@ -61,27 +69,37 @@ public class ArtistAdapter extends BaseAdapter{
             holder = (ViewHolder) convertView.getTag();
         }
 
-        //String tester = mResults.artists.items.get(0).name;
-        String tester2 = "fff";
-        //Artist artist = mArtistResults.get(position);
-        //String testt = artist.name;
         //holder.artistImageView.setImageResource(mArtistResults.getArtistImageURL(position));
-        //holder.artistLabel.setText(mArtistResults.get(0).name + "");
+
         if(mResults!=null) {
+            //Picasso.with(mContext).load(mResults.artists.items.get(position).images.get(0).url).into(holder.artistImageView);
+            //holder.artistImageView.setImageResource(mArtistResults.getArtistImageURL(position));
             holder.artistLabel.setText(mResults.artists.items.get(position).name);
+            /*try {
+                Log.d("IMAGE", mResults.artists.items.get(position).images.get(0).url);
+                Picasso.with(mContext).load(mResults.artists.items.get(position).images.get(0).url).into(holder.artistImageView);
+            } catch(IndexOutOfBoundsException npe) {
+                Log.d("IMAGE_ERR", npe.toString());
+            }*/
             return convertView;
         } else{
-
+            return convertView;
         }
-        return convertView;
+
     }
 
-    public void update(ArtistsPager artistsPager) {
+    public void update(ArtistsPager artistsPager) throws NullPointerException{
         mResults = artistsPager;
+    }
+
+    public void imageURL() {
+
     }
 
     private class ViewHolder {
         ImageView artistImageView;
         TextView artistLabel;
     }
+
+
 }
