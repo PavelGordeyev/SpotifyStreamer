@@ -30,7 +30,11 @@ public class ArtistAdapter extends BaseAdapter{
 
     @Override
     public int getCount() {
-        return 20;
+        if (mResults==null) {
+            return 0;
+        } else {
+            return mResults.artists.items.size();
+        }
     }
 
     @Override
