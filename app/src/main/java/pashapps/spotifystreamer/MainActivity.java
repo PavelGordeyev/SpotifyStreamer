@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -38,6 +39,7 @@ public class MainActivity extends ListActivity implements View.OnFocusChangeList
     private EditText mArtistSearch;
     private ArtistsPager mResults;
     private ArtistAdapter mAdapter;
+    private TextView mNoResults;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class MainActivity extends ListActivity implements View.OnFocusChangeList
         final SpotifyService spotifyService = api.getService();
 
         mArtistSearch = (EditText) findViewById(R.id.searchEditTextView);
+        mNoResults = (TextView) findViewById(R.id.noResultsLabel);
         mAdapter = new ArtistAdapter(this,mResults);
         setListAdapter(mAdapter);
 
@@ -122,6 +125,7 @@ public class MainActivity extends ListActivity implements View.OnFocusChangeList
                                 //setListAdapter(adapter);
                                 mAdapter.update(mResults);
                                 mAdapter.notifyDataSetChanged();
+                                toggleNoResults();
                             }
                         });
                     }
@@ -178,5 +182,13 @@ public class MainActivity extends ListActivity implements View.OnFocusChangeList
             isAvailable = true;
         }
         return isAvailable;
+    }
+
+    public void toggleNoResults() {
+        if(mNoResults.getVisibility() == View.VISIBLE) {
+            mNoResults.setVisibility(View.INVISIBLE);
+        } else {
+            mNoResults.setVisibility(View.VISIBLE);
+        }
     }
 }
