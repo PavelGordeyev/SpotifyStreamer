@@ -36,10 +36,14 @@ import retrofit.client.Response;
 public class MainActivity extends ListActivity implements View.OnFocusChangeListener{
 
     private static final String ARTIST= "ARTIST";
+    private static final String TESTINGNULL = "TESTINGNULL";
+    private static final String INVIS = "INVISIBLE";
+    private static final String VIS = "VISIBLE";
     private EditText mArtistSearch;
     private ArtistsPager mResults;
     private ArtistAdapter mAdapter;
     private TextView mNoResults;
+    private int mItemSize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,52 +58,6 @@ public class MainActivity extends ListActivity implements View.OnFocusChangeList
         mAdapter = new ArtistAdapter(this,mResults);
         setListAdapter(mAdapter);
 
-        /*
-        spotifyService.searchArtists("Nirvana", new SpotifyCallback<ArtistsPager>() {
-            @Override
-            public void failure(SpotifyError spotifyError) {
-                Log.d(ARTIST, spotifyError.toString());
-            }
-
-            @Override
-            public void success(final ArtistsPager artistsPager, Response response) {
-                Log.d(ARTIST, artistsPager.toString());
-                mResults = artistsPager;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //ArtistAdapter adapter = new ArtistAdapter(MainActivity.this, mResults);
-                        //setListAdapter(adapter);
-                        mAdapter.update(mResults);
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
-            }
-        });*/
-            //mResults = spotifyService.searchArtists("Nirvana");
-
-
-            /*mResults = spotifyService.searchArtists("Nirvana"), new SpotifyCallback<ArtistsPager>() {
-
-                @Override
-                public void failure(SpotifyError spotifyError) {
-                    Log.d(ARTIST, spotifyError.toString());
-                }
-
-                @Override
-                public void success(ArtistsPager artistsPager, Response response) {
-                    Log.d(ARTIST, artistsPager.toString());
-                    mResults = artistsPager;
-                    //ArtistResults artistResults = new ArtistResults(mResults,position);
-                    //Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").into(imageView);
-                }
-            });*/
-
-
-
-        //ArtistAdapter adapter = new ArtistAdapter(this, mResults);
-        //setListAdapter(adapter);
-
         mArtistSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -112,6 +70,14 @@ public class MainActivity extends ListActivity implements View.OnFocusChangeList
                     @Override
                     public void failure(SpotifyError spotifyError) {
                         Log.d(ARTIST, spotifyError.toString());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mAdapter.setCount(0);
+                                mAdapter.update(mResults);
+                                mAdapter.notifyDataSetChanged();
+                            }
+                        });
                     }
 
                     @Override
@@ -121,11 +87,11 @@ public class MainActivity extends ListActivity implements View.OnFocusChangeList
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                //ArtistAdapter adapter = new ArtistAdapter(MainActivity.this, mResults);
-                                //setListAdapter(adapter);
+                                mAdapter.setCount(1);
                                 mAdapter.update(mResults);
                                 mAdapter.notifyDataSetChanged();
-                                toggleNoResults();
+
+                                //Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").into(imageView);
                             }
                         });
                     }
@@ -135,16 +101,16 @@ public class MainActivity extends ListActivity implements View.OnFocusChangeList
             @Override
             public void afterTextChanged(Editable s) throws NullPointerException{
 
-                //Toast.makeText(MainActivity.this,"" + mArtistSearch.getText().toString(),Toast.LENGTH_LONG).show();
+                toggleNoResults();
             }
         });
-
-
-
-
-
     }
 
+    public void updateDisplay() {
+        mAdapter.update(mResults);
+        mAdapter.notifyDataSetChanged();
+        toggleNoResults();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -185,10 +151,12 @@ public class MainActivity extends ListActivity implements View.OnFocusChangeList
     }
 
     public void toggleNoResults() {
-        if(mNoResults.getVisibility() == View.VISIBLE) {
-            mNoResults.setVisibility(View.INVISIBLE);
-        } else {
+        if(mArtistSearch.getText().toString().equals("")) {
+            Log.d(VIS,"VISIBLE & NOT NULL SET");
             mNoResults.setVisibility(View.VISIBLE);
+        } else {
+            mNoResults.setVisibility(View.INVISIBLE);
+            Log.d(INVIS, "INVISIBLE OR NULL");
         }
     }
 }
