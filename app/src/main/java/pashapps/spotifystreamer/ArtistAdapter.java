@@ -62,7 +62,7 @@ public class ArtistAdapter extends BaseAdapter{
         if(convertView==null) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.artist_list_item,null);
             holder = new ViewHolder();
-            //holder.artistImageView = (ImageView) convertView.findViewById(R.id.artistImageView);
+            holder.artistImageView = (ImageView) convertView.findViewById(R.id.artistImageView);
             holder.artistLabel = (TextView) convertView.findViewById(R.id.artistLabel);
             convertView.setTag(holder);
         } else {
@@ -72,15 +72,16 @@ public class ArtistAdapter extends BaseAdapter{
         //holder.artistImageView.setImageResource(mArtistResults.getArtistImageURL(position));
 
         if(mResults!=null) {
+            //Log.d("Items:",mResults.artists.items.get(position).images.get(0).url);
             //Picasso.with(mContext).load(mResults.artists.items.get(position).images.get(0).url).into(holder.artistImageView);
             //holder.artistImageView.setImageResource(mArtistResults.getArtistImageURL(position));
             holder.artistLabel.setText(mResults.artists.items.get(position).name);
-            /*try {
+            try {
                 Log.d("IMAGE", mResults.artists.items.get(position).images.get(0).url);
                 Picasso.with(mContext).load(mResults.artists.items.get(position).images.get(0).url).into(holder.artistImageView);
             } catch(IndexOutOfBoundsException npe) {
                 Log.d("IMAGE_ERR", npe.toString());
-            }*/
+            }
             return convertView;
         } else{
             return convertView;
