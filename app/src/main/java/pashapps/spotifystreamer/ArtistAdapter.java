@@ -1,6 +1,7 @@
 package pashapps.spotifystreamer;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import java.util.List;
 
 import kaaes.spotify.webapi.android.models.Artist;
 import kaaes.spotify.webapi.android.models.ArtistsPager;
+import pashapps.spotifystreamer.R;
 
 /**
  * Created by pavelG on 6/9/15.
@@ -69,17 +71,13 @@ public class ArtistAdapter extends BaseAdapter{
             holder = (ViewHolder) convertView.getTag();
         }
 
-        //holder.artistImageView.setImageResource(mArtistResults.getArtistImageURL(position));
-
         if(mResults!=null) {
-            //Log.d("Items:",mResults.artists.items.get(position).images.get(0).url);
-            //Picasso.with(mContext).load(mResults.artists.items.get(position).images.get(0).url).into(holder.artistImageView);
-            //holder.artistImageView.setImageResource(mArtistResults.getArtistImageURL(position));
             holder.artistLabel.setText(mResults.artists.items.get(position).name);
             try {
-                Log.d("IMAGE", mResults.artists.items.get(position).images.get(0).url);
+                Log.d("IMAGE", mResults.artists.items.get(position).id);
                 Picasso.with(mContext).load(mResults.artists.items.get(position).images.get(0).url).into(holder.artistImageView);
             } catch(IndexOutOfBoundsException npe) {
+                //holder.artistImageView.setBackgroundColor(Color.YELLOW);
                 Log.d("IMAGE_ERR", npe.toString());
             }
             return convertView;
@@ -93,9 +91,6 @@ public class ArtistAdapter extends BaseAdapter{
         mResults = artistsPager;
     }
 
-    public void imageURL() {
-
-    }
 
     private class ViewHolder {
         ImageView artistImageView;

@@ -8,17 +8,27 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/artistLabel"
-        android:layout_marginTop="52dp"
+        android:id="@+id/trackLabel"
+        android:layout_marginTop="33dp"
         android:layout_marginLeft="125dp"
-        tools:text="Red Hot Chili Peppers"
-        android:textSize="16dp"/>
+        tools:text="Otherside"
+        android:textSize="16sp"/>
 
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:id="@+id/artistImageView"
+        android:id="@+id/albumImageView"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:id="@+id/albumLabel"
+        android:layout_below="@+id/trackLabel"
+        android:layout_alignStart="@+id/trackLabel"
+        android:textSize="14sp"
+        tools:text="Californication"/>
 </RelativeLayout>

@@ -2,34 +2,25 @@ package pashapps.spotifystreamer;
 
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.squareup.picasso.Picasso;
-
-import java.util.List;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyCallback;
 import kaaes.spotify.webapi.android.SpotifyError;
 import kaaes.spotify.webapi.android.SpotifyService;
-import kaaes.spotify.webapi.android.models.Artist;
-import kaaes.spotify.webapi.android.models.Artists;
 import kaaes.spotify.webapi.android.models.ArtistsPager;
-import retrofit.Callback;
-import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 
@@ -39,11 +30,12 @@ public class MainActivity extends ListActivity implements View.OnFocusChangeList
     private static final String TESTINGNULL = "TESTINGNULL";
     private static final String INVIS = "INVISIBLE";
     private static final String VIS = "VISIBLE";
+    public static final String ARTISTID = "ARTIST ID";
     private EditText mArtistSearch;
     private ArtistsPager mResults;
     private ArtistAdapter mAdapter;
     private TextView mNoResults;
-    private int mItemSize;
+    private String mArtistid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +98,7 @@ public class MainActivity extends ListActivity implements View.OnFocusChangeList
         });
     }
 
+
     public void updateDisplay() {
         mAdapter.update(mResults);
         mAdapter.notifyDataSetChanged();
@@ -159,4 +152,15 @@ public class MainActivity extends ListActivity implements View.OnFocusChangeList
             Log.d(INVIS, "INVISIBLE OR NULL");
         }
     }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        mArtistid = mResults.artists.items.get(position).id;
+        Intent intent = new Intent(this,TopTracksActivity.class);
+        intent.putExtra(ARTISTID,mArtistid);
+        startActivity(intent);
+    }
+
 }
