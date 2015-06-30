@@ -1,12 +1,15 @@
 package pashapps.spotifystreamer;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +26,7 @@ public class TopTracksActivity extends ActionBarActivity {
 
     private String mArtistID;
     private TrackListFragment mTrackListFragment;
-    private TextView mNoTracks;
+    private static final String TRACKS = "TRACKS";
 
 
     @Override
@@ -32,9 +35,6 @@ public class TopTracksActivity extends ActionBarActivity {
         setContentView(R.layout.activity_top_tracks);
 
         setTitle("Top 10 Tracks");
-
-        mNoTracks = (TextView) findViewById(R.id.noTracksLabel);
-        mNoTracks.setVisibility(View.INVISIBLE);
 
         SpotifyApi api = new SpotifyApi();
         final SpotifyService spotifyService = api.getService();
@@ -55,18 +55,28 @@ public class TopTracksActivity extends ActionBarActivity {
         spotifyService.getArtistTopTrack(mArtistID, options, new SpotifyCallback<Tracks>() {
             @Override
             public void failure(SpotifyError spotifyError) {
+                Log.d(TRACKS, spotifyError.toString());
 
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mTrackListFragment.updateFragment(0);
+                        Context context = getApplicationContext();
+                        Toast.makeText(context, "Tracks not found...Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
             }
 
             @Override
             public void success(Tracks tracks, Response response) {
                 mTrackListFragment.setResults(tracks);
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         getFragmentManager().beginTransaction().
                                 replace(R.id.trackFragmentContainer, mTrackListFragment).commit();
-                        mTrackListFragment.updateFragment();
+                        mTrackListFragment.updateFragment(1);
                     }
                 });
 

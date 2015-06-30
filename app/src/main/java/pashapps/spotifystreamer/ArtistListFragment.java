@@ -50,20 +50,10 @@ public class ArtistListFragment extends Fragment {
         mResults = results;
     }
 
-    public void updateFragment() {
-        mAdapter.setCount(1);
+    public void updateFragment(int count) {
+        mAdapter.setCount(count);
         mAdapter.update(mResults);
         mAdapter.notifyDataSetChanged();
     }
-/*
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-
-        mArtistid = mResults.artists.items.get(position).id;
-        Intent intent = new Intent(getActivity(),TopTracksActivity.class);
-        intent.putExtra(ARTISTID, mArtistid);
-        startActivity(intent);
-    }*/
 
 }

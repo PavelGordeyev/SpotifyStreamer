@@ -27,7 +27,6 @@ public class MainActivity extends ActionBarActivity implements View.OnFocusChang
 
     private static final String ARTIST= "ARTIST";
     private EditText mArtistSearch;
-    private TextView mNoResults;
     private ArtistListFragment mArtistListFragment;
 
     @Override
@@ -39,7 +38,6 @@ public class MainActivity extends ActionBarActivity implements View.OnFocusChang
         final SpotifyService spotifyService = api.getService();
 
         mArtistSearch = (EditText) findViewById(R.id.searchEditTextView);
-        mNoResults = (TextView) findViewById(R.id.noResultsLabel);
         mArtistListFragment = new ArtistListFragment();
         getFragmentManager().beginTransaction().
                 add(R.id.artistFragmentContainer, mArtistListFragment).commit();
@@ -57,12 +55,11 @@ public class MainActivity extends ActionBarActivity implements View.OnFocusChang
                         @Override
                         public void failure(SpotifyError spotifyError) {
                             Log.d(ARTIST, spotifyError.toString());
-
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mNoResults.setVisibility(View.VISIBLE);
-
+                                    //Toast.makeText(getApplicationContext(), "Artist not found...Please try again", Toast.LENGTH_LONG).show();
+                                    mArtistListFragment.updateFragment(0);
                                 }
                             });
                         }
@@ -74,24 +71,23 @@ public class MainActivity extends ActionBarActivity implements View.OnFocusChang
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mNoResults.setVisibility(View.INVISIBLE);
                                     getFragmentManager().beginTransaction().
                                             replace(R.id.artistFragmentContainer, mArtistListFragment).commit();
-                                    mArtistListFragment.updateFragment();
+                                    mArtistListFragment.updateFragment(1);
                                 }
                             });
                         }
                     });
                 } else {
-                    Toast.makeText(getApplicationContext(),"Network unavailable", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Network unavailable", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void afterTextChanged(Editable s) throws NullPointerException{
+            public void afterTextChanged(Editable s) throws NullPointerException {
 
-                if(mArtistSearch.getText().toString().isEmpty()) {
-                    mNoResults.setVisibility(View.VISIBLE);
+                if (mArtistSearch.getText().toString().isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Enter new search", Toast.LENGTH_LONG).show();
                 }
             }
         });

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -21,23 +22,33 @@ public class TracksAdapter extends BaseAdapter{
     private Context mContext;
     private Tracks mResults;
     private TextView mNoTracks;
+    private int mCount;
 
     public TracksAdapter(Context context,Tracks tracks) {
         mContext = context;
         mResults = tracks;
     }
 
+    public void setCount(int count) {
+        mCount = count;
+    }
     @Override
     public int getCount() {
-
+        /*
         int size;
         try {
             size = mResults.tracks.size();
         } catch(NullPointerException npe) {
             Log.d("SIZE",npe.toString());
             size = 0;
+        }*/
+
+        if (mResults==null || mCount==0) {
+            return 0;
+        } else {
+            return mResults.tracks.size();
         }
-        return size;
+        //return size;
     }
 
     @Override
@@ -84,6 +95,7 @@ public class TracksAdapter extends BaseAdapter{
         TextView albumLabel;
         TextView trackLabel;
     }
+
     public void update(Tracks tracks) throws NullPointerException{
         mResults = tracks;
     }
