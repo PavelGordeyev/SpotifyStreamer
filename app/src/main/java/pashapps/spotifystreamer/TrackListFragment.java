@@ -12,7 +12,7 @@ import kaaes.spotify.webapi.android.models.Tracks;
 
 
 /**
- * A placeholder fragment containing a simple view.
+ * A placeholder fragment containing the tracks list view.
  */
 public class TrackListFragment extends Fragment {
 

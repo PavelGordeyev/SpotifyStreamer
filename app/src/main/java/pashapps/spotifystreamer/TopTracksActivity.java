@@ -1,11 +1,12 @@
 package pashapps.spotifystreamer;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,14 +22,9 @@ import retrofit.client.Response;
 public class TopTracksActivity extends ActionBarActivity {
 
     private String mArtistID;
-    private TracksAdapter mAdapter;
     private TrackListFragment mTrackListFragment;
-    /*
-    @Override
-    protected  void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private TextView mNoTracks;
 
-    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +32,9 @@ public class TopTracksActivity extends ActionBarActivity {
         setContentView(R.layout.activity_top_tracks);
 
         setTitle("Top 10 Tracks");
+
+        mNoTracks = (TextView) findViewById(R.id.noTracksLabel);
+        mNoTracks.setVisibility(View.INVISIBLE);
 
         SpotifyApi api = new SpotifyApi();
         final SpotifyService spotifyService = api.getService();

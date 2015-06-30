@@ -77,7 +77,6 @@ public class ArtistAdapter extends BaseAdapter{
                 Log.d("IMAGE", mResults.artists.items.get(position).id);
                 Picasso.with(mContext).load(mResults.artists.items.get(position).images.get(0).url).into(holder.artistImageView);
             } catch(IndexOutOfBoundsException npe) {
-                //holder.artistImageView.setBackgroundColor(Color.YELLOW);
                 Log.d("IMAGE_ERR", npe.toString());
             }
             return convertView;

@@ -1,24 +1,17 @@
 package pashapps.spotifystreamer;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
-import kaaes.spotify.webapi.android.models.ArtistsPager;
 import kaaes.spotify.webapi.android.models.Tracks;
-import kaaes.spotify.webapi.android.models.TracksPager;
-import pashapps.spotifystreamer.R;
 
 /**
  * Created by pavelG on 6/14/15.
@@ -26,26 +19,25 @@ import pashapps.spotifystreamer.R;
 public class TracksAdapter extends BaseAdapter{
 
     private Context mContext;
-    private int mCount;
     private Tracks mResults;
+    private TextView mNoTracks;
 
     public TracksAdapter(Context context,Tracks tracks) {
         mContext = context;
         mResults = tracks;
-
     }
 
     @Override
     public int getCount() {
+
         int size;
         try {
             size = mResults.tracks.size();
         } catch(NullPointerException npe) {
             Log.d("SIZE",npe.toString());
-            size = 10;
+            size = 0;
         }
         return size;
-
     }
 
     @Override

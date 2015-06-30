@@ -1,10 +1,6 @@
 package pashapps.spotifystreamer;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.support.v4.app.FragmentActivity;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -15,10 +11,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyCallback;
@@ -31,15 +26,8 @@ import retrofit.client.Response;
 public class MainActivity extends ActionBarActivity implements View.OnFocusChangeListener{
 
     private static final String ARTIST= "ARTIST";
-    private static final String TESTINGNULL = "TESTINGNULL";
-    private static final String INVIS = "INVISIBLE";
-    private static final String VIS = "VISIBLE";
-    //public static final String ARTISTID = "ARTIST ID";
     private EditText mArtistSearch;
-    private ArtistsPager mResults;
-    //private ArtistAdapter mAdapter;
     private TextView mNoResults;
-    //private String mArtistid;
     private ArtistListFragment mArtistListFragment;
 
     @Override
@@ -55,8 +43,6 @@ public class MainActivity extends ActionBarActivity implements View.OnFocusChang
         mArtistListFragment = new ArtistListFragment();
         getFragmentManager().beginTransaction().
                 add(R.id.artistFragmentContainer, mArtistListFragment).commit();
-        //mAdapter = new ArtistAdapter(this,mResults);
-        //setListAdapter(mAdapter);
 
         mArtistSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -66,37 +52,39 @@ public class MainActivity extends ActionBarActivity implements View.OnFocusChang
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                spotifyService.searchArtists(mArtistSearch.getText().toString(), new SpotifyCallback<ArtistsPager>() {
-                    @Override
-                    public void failure(SpotifyError spotifyError) {
-                        Log.d(ARTIST, spotifyError.toString());
+                if (isNetworkAvailable()) {
+                    spotifyService.searchArtists(mArtistSearch.getText().toString(), new SpotifyCallback<ArtistsPager>() {
+                        @Override
+                        public void failure(SpotifyError spotifyError) {
+                            Log.d(ARTIST, spotifyError.toString());
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mNoResults.setVisibility(View.VISIBLE);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mNoResults.setVisibility(View.VISIBLE);
 
-                            }
-                        });
-                    }
+                                }
+                            });
+                        }
 
-                    @Override
-                    public void success(final ArtistsPager artistsPager, Response response) {
-                        Log.d(ARTIST, artistsPager.toString());
-                        //mResults = artistsPager;
-                        mArtistListFragment.setResults(artistsPager);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                //mArtistListFragment.updateFragment();
-                                mNoResults.setVisibility(View.INVISIBLE);
-                                getFragmentManager().beginTransaction().
-                                        replace(R.id.artistFragmentContainer, mArtistListFragment).commit();
-                                mArtistListFragment.updateFragment();
-                            }
-                        });
-                    }
-                });
+                        @Override
+                        public void success(final ArtistsPager artistsPager, Response response) {
+                            Log.d(ARTIST, artistsPager.toString());
+                            mArtistListFragment.setResults(artistsPager);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mNoResults.setVisibility(View.INVISIBLE);
+                                    getFragmentManager().beginTransaction().
+                                            replace(R.id.artistFragmentContainer, mArtistListFragment).commit();
+                                    mArtistListFragment.updateFragment();
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    Toast.makeText(getApplicationContext(),"Network unavailable", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
@@ -146,16 +134,6 @@ public class MainActivity extends ActionBarActivity implements View.OnFocusChang
             isAvailable = true;
         }
         return isAvailable;
-    }
-
-    public void toggleNoResults() {
-        if(mArtistSearch.getText().toString().equals("")) {
-            Log.d(VIS,"VISIBLE & NOT NULL SET");
-            mNoResults.setVisibility(View.VISIBLE);
-        } else {
-            mNoResults.setVisibility(View.INVISIBLE);
-            Log.d(INVIS, "INVISIBLE OR NULL");
-        }
     }
 
 
