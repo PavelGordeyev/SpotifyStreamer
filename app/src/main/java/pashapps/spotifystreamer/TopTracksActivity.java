@@ -3,6 +3,7 @@ package pashapps.spotifystreamer;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -17,29 +18,40 @@ import kaaes.spotify.webapi.android.models.Tracks;
 import retrofit.client.Response;
 
 
-public class TopTracksActivity extends ListActivity {
+public class TopTracksActivity extends ActionBarActivity {
 
     private String mArtistID;
     private TracksAdapter mAdapter;
-    private Tracks mResults;
+    private TrackListFragment mTrackListFragment;
+    /*
+    @Override
+    protected  void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_tracks);
 
+        setTitle("Top 10 Tracks");
+
         SpotifyApi api = new SpotifyApi();
         final SpotifyService spotifyService = api.getService();
 
-        mAdapter = new TracksAdapter(this, mResults);
-        setListAdapter(mAdapter);
+        mTrackListFragment = new TrackListFragment();
+        getFragmentManager().beginTransaction().
+                add(R.id.trackFragmentContainer, mTrackListFragment).commit();
+
         Bundle bundle;
         Intent intent = getIntent();
         bundle = intent.getExtras();
-        mArtistID = bundle.get(MainActivity.ARTISTID) + "";
+        mArtistID = bundle.get(ArtistListFragment.ARTISTID) + "";
 
         Map<String,Object> options= new HashMap<>();
-        options.put("country","US");
+        options.put("country", "US");
+
 
         spotifyService.getArtistTopTrack(mArtistID, options, new SpotifyCallback<Tracks>() {
             @Override
@@ -49,12 +61,13 @@ public class TopTracksActivity extends ListActivity {
 
             @Override
             public void success(Tracks tracks, Response response) {
-                mResults = tracks;
+                mTrackListFragment.setResults(tracks);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapter.update(mResults);
-                        mAdapter.notifyDataSetChanged();
+                        getFragmentManager().beginTransaction().
+                                replace(R.id.trackFragmentContainer, mTrackListFragment).commit();
+                        mTrackListFragment.updateFragment();
                     }
                 });
 

@@ -7,4 +7,5 @@
     <string name="network_unavailable_message">Network is unavailable</string>
     <string name="title_activity_top_tracks">TopTracksActivity</string>
     <string name="title_activity_results_">Results_Activity</string>
+    <string name="title_activity_test_fragment">TestFragment</string>
 </resources>

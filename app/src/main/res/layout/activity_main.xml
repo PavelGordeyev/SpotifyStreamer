@@ -21,6 +21,14 @@
         android:singleLine="true"
         android:maxLines="1"/>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/artistFragmentContainer"
+        android:layout_below="@+id/searchEditTextView">
+
+    </RelativeLayout>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,12 +37,12 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:textColor="@color/primary_material_dark"/>
-
+<!--
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@android:id/list"
         android:layout_below="@+id/searchEditTextView"
         android:layout_centerHorizontal="true"
-        android:dividerHeight="1dp"/>
+        android:dividerHeight="1dp"/>-->
 </RelativeLayout>

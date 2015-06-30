@@ -1,17 +1,21 @@
 package pashapps.spotifystreamer;
 
-import android.app.ListActivity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,18 +28,19 @@ import kaaes.spotify.webapi.android.models.ArtistsPager;
 import retrofit.client.Response;
 
 
-public class MainActivity extends ListActivity implements View.OnFocusChangeListener{
+public class MainActivity extends ActionBarActivity implements View.OnFocusChangeListener{
 
     private static final String ARTIST= "ARTIST";
     private static final String TESTINGNULL = "TESTINGNULL";
     private static final String INVIS = "INVISIBLE";
     private static final String VIS = "VISIBLE";
-    public static final String ARTISTID = "ARTIST ID";
+    //public static final String ARTISTID = "ARTIST ID";
     private EditText mArtistSearch;
     private ArtistsPager mResults;
-    private ArtistAdapter mAdapter;
+    //private ArtistAdapter mAdapter;
     private TextView mNoResults;
-    private String mArtistid;
+    //private String mArtistid;
+    private ArtistListFragment mArtistListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +52,11 @@ public class MainActivity extends ListActivity implements View.OnFocusChangeList
 
         mArtistSearch = (EditText) findViewById(R.id.searchEditTextView);
         mNoResults = (TextView) findViewById(R.id.noResultsLabel);
-        mAdapter = new ArtistAdapter(this,mResults);
-        setListAdapter(mAdapter);
+        mArtistListFragment = new ArtistListFragment();
+        getFragmentManager().beginTransaction().
+                add(R.id.artistFragmentContainer, mArtistListFragment).commit();
+        //mAdapter = new ArtistAdapter(this,mResults);
+        //setListAdapter(mAdapter);
 
         mArtistSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -62,12 +70,12 @@ public class MainActivity extends ListActivity implements View.OnFocusChangeList
                     @Override
                     public void failure(SpotifyError spotifyError) {
                         Log.d(ARTIST, spotifyError.toString());
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mAdapter.setCount(0);
-                                mAdapter.update(mResults);
-                                mAdapter.notifyDataSetChanged();
+                                mNoResults.setVisibility(View.VISIBLE);
+
                             }
                         });
                     }
@@ -75,15 +83,16 @@ public class MainActivity extends ListActivity implements View.OnFocusChangeList
                     @Override
                     public void success(final ArtistsPager artistsPager, Response response) {
                         Log.d(ARTIST, artistsPager.toString());
-                        mResults = artistsPager;
+                        //mResults = artistsPager;
+                        mArtistListFragment.setResults(artistsPager);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mAdapter.setCount(1);
-                                mAdapter.update(mResults);
-                                mAdapter.notifyDataSetChanged();
-
-                                //Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").into(imageView);
+                                //mArtistListFragment.updateFragment();
+                                mNoResults.setVisibility(View.INVISIBLE);
+                                getFragmentManager().beginTransaction().
+                                        replace(R.id.artistFragmentContainer, mArtistListFragment).commit();
+                                mArtistListFragment.updateFragment();
                             }
                         });
                     }
@@ -93,17 +102,13 @@ public class MainActivity extends ListActivity implements View.OnFocusChangeList
             @Override
             public void afterTextChanged(Editable s) throws NullPointerException{
 
-                toggleNoResults();
+                if(mArtistSearch.getText().toString().isEmpty()) {
+                    mNoResults.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
 
-
-    public void updateDisplay() {
-        mAdapter.update(mResults);
-        mAdapter.notifyDataSetChanged();
-        toggleNoResults();
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -153,14 +158,6 @@ public class MainActivity extends ListActivity implements View.OnFocusChangeList
         }
     }
 
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
 
-        mArtistid = mResults.artists.items.get(position).id;
-        Intent intent = new Intent(this,TopTracksActivity.class);
-        intent.putExtra(ARTISTID,mArtistid);
-        startActivity(intent);
-    }
 
 }

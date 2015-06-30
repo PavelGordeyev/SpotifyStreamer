@@ -37,7 +37,15 @@ public class TracksAdapter extends BaseAdapter{
 
     @Override
     public int getCount() {
-        return 10;
+        int size;
+        try {
+            size = mResults.tracks.size();
+        } catch(NullPointerException npe) {
+            Log.d("SIZE",npe.toString());
+            size = 10;
+        }
+        return size;
+
     }
 
     @Override
@@ -66,12 +74,11 @@ public class TracksAdapter extends BaseAdapter{
         }
 
         if(mResults!=null) {
-            holder.albumLabel.setText(mResults.tracks.get(position).album.name);
-            holder.trackLabel.setText(mResults.tracks.get(position).name);
             try {
+                holder.albumLabel.setText(mResults.tracks.get(position).album.name);
+                holder.trackLabel.setText(mResults.tracks.get(position).name);
                 Picasso.with(mContext).load(mResults.tracks.get(position).album.images.get(0).url).into(holder.albumImageView);
             } catch(IndexOutOfBoundsException npe) {
-                holder.albumImageView.setBackgroundColor(Color.YELLOW);
                 Log.d("IMAGE_ERR", npe.toString());
             }
             return convertView;

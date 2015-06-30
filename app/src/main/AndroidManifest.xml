@@ -23,6 +23,10 @@
             android:name=".TopTracksActivity"
             android:label="@string/title_activity_top_tracks" >
         </activity>
+        <activity
+            android:name=".ArtistListFragment"
+            android:label="@string/title_activity_test_fragment" >
+        </activity>
     </application>
 
 </manifest>
