@@ -47,6 +47,7 @@ public class TopTracksActivity extends ActionBarActivity {
         Intent intent = getIntent();
         bundle = intent.getExtras();
         mArtistID = bundle.get(ArtistListFragment.ARTISTID) + "";
+        getSupportActionBar().setSubtitle(bundle.get(ArtistListFragment.ARTISTNAME) + "");
 
         Map<String,Object> options= new HashMap<>();
         options.put("country", "US");

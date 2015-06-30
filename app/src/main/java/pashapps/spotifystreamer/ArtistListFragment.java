@@ -17,8 +17,11 @@ public class ArtistListFragment extends Fragment {
     private ListView mArtistListView;
     private ArtistAdapter mAdapter;
     private ArtistsPager mResults;
-    private String mArtistid;
+    private String mArtistID;
+    private String mArtistName;
+
     public static final String ARTISTID = "ARTIST ID";
+    public static final String ARTISTNAME = "ARTIST NAME";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,9 +41,11 @@ public class ArtistListFragment extends Fragment {
         mArtistListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mArtistid = mResults.artists.items.get(position).id;
+                mArtistID = mResults.artists.items.get(position).id;
+                mArtistName = mResults.artists.items.get(position).name;
                 Intent intent = new Intent(getActivity(),TopTracksActivity.class);
-                intent.putExtra(ARTISTID, mArtistid);
+                intent.putExtra(ARTISTID, mArtistID);
+                intent.putExtra(ARTISTNAME,mArtistName);
                 startActivity(intent);
             }
         });
