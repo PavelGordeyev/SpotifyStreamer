@@ -48,6 +48,10 @@ public class TrackListFragment extends Fragment {
         mAdapter.update(mResults);
         mAdapter.notifyDataSetChanged();
 
+        if(mResults == null || mResults.tracks.size() == 0){
+            Toast.makeText(getActivity(),"No Top Track(s) Found",Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 }

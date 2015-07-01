@@ -32,6 +32,11 @@ public class MainActivity extends ActionBarActivity implements View.OnFocusChang
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /*if(getResources().getConfiguration().orientation==1) {
+            setContentView(R.layout.activity_main_horizontal);
+        } else {
+            setContentView(R.layout.activity_main);
+        }*/
         setContentView(R.layout.activity_main);
 
         SpotifyApi api = new SpotifyApi();

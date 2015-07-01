@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import kaaes.spotify.webapi.android.models.ArtistsPager;
 
@@ -59,6 +60,10 @@ public class ArtistListFragment extends Fragment {
         mAdapter.setCount(count);
         mAdapter.update(mResults);
         mAdapter.notifyDataSetChanged();
+
+        if(mResults.artists.items.size() == 0 || mResults == null){
+            Toast.makeText(getActivity(),"No Artist(s) Found",Toast.LENGTH_SHORT).show();
+        }
     }
 
 }
