@@ -24,11 +24,11 @@ import pashapps.spotifystreamer.R;
 public class ArtistAdapter extends BaseAdapter{
 
     private Context mContext;
-    private ArtistsPager mResults;
+    private ArtistP[] mResults;
     private int mCount;
 
 
-    public ArtistAdapter(Context context, ArtistsPager results) {
+    public ArtistAdapter(Context context, ArtistP[] results) {
         mContext = context;
         mResults = results;
 
@@ -43,13 +43,13 @@ public class ArtistAdapter extends BaseAdapter{
         if (mResults==null || mCount==0) {
             return 0;
         } else {
-            return mResults.artists.items.size();
+            return mResults.length;
         }
     }
 
     @Override
     public Object getItem(int position) {
-        return mResults.artists.items.get(position);
+        return mResults[position];
     }
 
     @Override
@@ -72,10 +72,10 @@ public class ArtistAdapter extends BaseAdapter{
         }
 
         if(mResults!=null) {
-            holder.artistLabel.setText(mResults.artists.items.get(position).name);
+            holder.artistLabel.setText(mResults[position].getName());
             try {
-                Log.d("IMAGE", mResults.artists.items.get(position).id);
-                Picasso.with(mContext).load(mResults.artists.items.get(position).images.get(0).url).into(holder.artistImageView);
+                Log.d("IMAGE", mResults[position].getArtistID());
+                Picasso.with(mContext).load(mResults[position].getImageID()).into(holder.artistImageView);
             } catch(IndexOutOfBoundsException npe) {
                 Log.d("IMAGE_ERR", npe.toString());
             }
@@ -86,8 +86,8 @@ public class ArtistAdapter extends BaseAdapter{
 
     }
 
-    public void update(ArtistsPager artistsPager) throws NullPointerException{
-        mResults = artistsPager;
+    public void update(ArtistP[] artistPs) throws NullPointerException{
+        mResults = artistPs;
     }
 
 

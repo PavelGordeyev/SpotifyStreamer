@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
@@ -28,19 +27,12 @@ public class MainActivity extends ActionBarActivity implements View.OnFocusChang
     private static final String ARTIST= "ARTIST";
     private EditText mArtistSearch;
     private ArtistListFragment mArtistListFragment;
+    private ArtistsPager mArtistResults;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*if(getResources().getConfiguration().orientation==1) {
-            setContentView(R.layout.activity_main_horizontal);
-        } else {
-            setContentView(R.layout.activity_main);
-        }*/
         setContentView(R.layout.activity_main);
-
-        SpotifyApi api = new SpotifyApi();
-        final SpotifyService spotifyService = api.getService();
 
         mArtistSearch = (EditText) findViewById(R.id.searchEditTextView);
         mArtistListFragment = new ArtistListFragment();
@@ -55,42 +47,12 @@ public class MainActivity extends ActionBarActivity implements View.OnFocusChang
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (isNetworkAvailable()) {
-                    spotifyService.searchArtists(mArtistSearch.getText().toString(), new SpotifyCallback<ArtistsPager>() {
-                        @Override
-                        public void failure(SpotifyError spotifyError) {
-                            Log.d(ARTIST, spotifyError.toString());
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    //Toast.makeText(getApplicationContext(), "Artist not found...Please try again", Toast.LENGTH_LONG).show();
-                                    mArtistListFragment.updateFragment(0);
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void success(final ArtistsPager artistsPager, Response response) {
-                            Log.d(ARTIST, artistsPager.toString());
-                            mArtistListFragment.setResults(artistsPager);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    getFragmentManager().beginTransaction().
-                                            replace(R.id.artistFragmentContainer, mArtistListFragment).commit();
-                                    mArtistListFragment.updateFragment(1);
-                                }
-                            });
-                        }
-                    });
-                } else {
-                    Toast.makeText(getApplicationContext(), "Network unavailable", Toast.LENGTH_LONG).show();
-                }
+                //getArtistResults();
             }
 
             @Override
             public void afterTextChanged(Editable s) throws NullPointerException {
-
+                getArtistResults();
                 if (mArtistSearch.getText().toString().isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Enter new search", Toast.LENGTH_LONG).show();
                 }
@@ -125,6 +87,69 @@ public class MainActivity extends ActionBarActivity implements View.OnFocusChang
 
     }
 
+    private void getArtistResults() {
+
+        SpotifyApi api = new SpotifyApi();
+        final SpotifyService spotifyService = api.getService();
+
+        if (isNetworkAvailable()) {
+            spotifyService.searchArtists(mArtistSearch.getText().toString(), new SpotifyCallback<ArtistsPager>() {
+                @Override
+                public void failure(SpotifyError spotifyError) {
+                    Log.d(ARTIST, spotifyError.toString());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mArtistListFragment.updateFragment(0);
+                        }
+                    });
+                }
+
+                @Override
+                public void success(final ArtistsPager artistsPager, Response response) {
+                    Log.d(ARTIST, artistsPager.toString());
+                    mArtistResults = artistsPager;
+                    mArtistListFragment.setResults(setArtistList());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getFragmentManager().beginTransaction().
+                                    replace(R.id.artistFragmentContainer, mArtistListFragment).commit();
+                            mArtistListFragment.updateFragment(1);
+                        }
+                    });
+                }
+            });
+        } else {
+            Toast.makeText(getApplicationContext(), "Network unavailable", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private ArtistP[] setArtistList() {
+
+        ArtistP[] artistPs;
+        if(mArtistResults!=null) {
+            int size = mArtistResults.artists.items.size();
+            artistPs = new ArtistP[size];
+
+            for (int i = 0; i < size; i++) {
+                ArtistP artistP = new ArtistP();
+                artistP.setName(mArtistResults.artists.items.get(i).name);
+                artistP.setArtistID(mArtistResults.artists.items.get(i).id);
+                try {
+                    artistP.setImageID(mArtistResults.artists.items.get(i).images.get(0).url);
+                } catch(IndexOutOfBoundsException iob){
+                    Log.d("NO_IMAGE",iob.toString());
+                }
+
+                artistPs[i] = artistP;
+            }
+        } else{
+            artistPs = null;
+        }
+
+        return artistPs;
+    }
 
     private boolean isNetworkAvailable() {
         ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

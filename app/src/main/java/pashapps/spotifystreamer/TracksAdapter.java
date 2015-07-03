@@ -20,11 +20,10 @@ import kaaes.spotify.webapi.android.models.Tracks;
 public class TracksAdapter extends BaseAdapter{
 
     private Context mContext;
-    private Tracks mResults;
-    private TextView mNoTracks;
+    private TracksP[] mResults;
     private int mCount;
 
-    public TracksAdapter(Context context,Tracks tracks) {
+    public TracksAdapter(Context context,TracksP[] tracks) {
         mContext = context;
         mResults = tracks;
     }
@@ -34,26 +33,17 @@ public class TracksAdapter extends BaseAdapter{
     }
     @Override
     public int getCount() {
-        /*
-        int size;
-        try {
-            size = mResults.tracks.size();
-        } catch(NullPointerException npe) {
-            Log.d("SIZE",npe.toString());
-            size = 0;
-        }*/
 
         if (mResults==null || mCount==0) {
             return 0;
         } else {
-            return mResults.tracks.size();
+            return mResults.length;
         }
-        //return size;
     }
 
     @Override
     public Object getItem(int position) {
-        return mResults.tracks.get(position);
+        return mResults[position];
     }
 
     @Override
@@ -78,9 +68,9 @@ public class TracksAdapter extends BaseAdapter{
 
         if(mResults!=null) {
             try {
-                holder.albumLabel.setText(mResults.tracks.get(position).album.name);
-                holder.trackLabel.setText(mResults.tracks.get(position).name);
-                Picasso.with(mContext).load(mResults.tracks.get(position).album.images.get(0).url).into(holder.albumImageView);
+                holder.albumLabel.setText(mResults[position].getAlbumName());
+                holder.trackLabel.setText(mResults[position].getTrackName());
+                Picasso.with(mContext).load(mResults[position].getAlbumImageID()).into(holder.albumImageView);
             } catch(IndexOutOfBoundsException npe) {
                 Log.d("IMAGE_ERR", npe.toString());
             }
@@ -96,7 +86,7 @@ public class TracksAdapter extends BaseAdapter{
         TextView trackLabel;
     }
 
-    public void update(Tracks tracks) throws NullPointerException{
+    public void update(TracksP[] tracks) throws NullPointerException{
         mResults = tracks;
     }
 }

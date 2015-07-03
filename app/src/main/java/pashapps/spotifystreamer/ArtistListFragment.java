@@ -3,6 +3,7 @@ package pashapps.spotifystreamer;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ public class ArtistListFragment extends Fragment {
 
     private ListView mArtistListView;
     private ArtistAdapter mAdapter;
-    private ArtistsPager mResults;
+    private ArtistP[] mResults;
     private String mArtistID;
     private String mArtistName;
 
@@ -42,8 +43,8 @@ public class ArtistListFragment extends Fragment {
         mArtistListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mArtistID = mResults.artists.items.get(position).id;
-                mArtistName = mResults.artists.items.get(position).name;
+                mArtistID = mResults[position].getArtistID();
+                mArtistName = mResults[position].getName();
                 Intent intent = new Intent(getActivity(),TopTracksActivity.class);
                 intent.putExtra(ARTISTID, mArtistID);
                 intent.putExtra(ARTISTNAME,mArtistName);
@@ -52,17 +53,24 @@ public class ArtistListFragment extends Fragment {
         });
     }
 
-    public void setResults(ArtistsPager results){
+    public void setResults(ArtistP[] results){
         mResults = results;
     }
 
     public void updateFragment(int count) {
+        Toast toast = new Toast(getActivity());
         mAdapter.setCount(count);
         mAdapter.update(mResults);
         mAdapter.notifyDataSetChanged();
 
-        if(mResults.artists.items.size() == 0 || mResults == null){
-            Toast.makeText(getActivity(),"No Artist(s) Found",Toast.LENGTH_SHORT).show();
+        try {
+            if (mResults == null || mResults.length == 0) {
+                toast.makeText(getActivity(), "No Artist(s) Found", Toast.LENGTH_SHORT).show();
+            } else if (toast.getView().isShown()) {
+                toast.cancel();
+            }
+        }catch (NullPointerException npe){
+            Log.d("NO_TOAST",npe.toString());
         }
     }
 

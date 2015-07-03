@@ -21,7 +21,7 @@ public class TrackListFragment extends Fragment {
 
     private ListView mTrackListView;
     private TracksAdapter mAdapter;
-    private Tracks mResults;
+    private TracksP[] mResults;
 
     public TrackListFragment() {
     }
@@ -38,7 +38,7 @@ public class TrackListFragment extends Fragment {
         return view;
     }
 
-    public void setResults(Tracks results){
+    public void setResults(TracksP[] results){
         mResults = results;
     }
 
@@ -48,7 +48,7 @@ public class TrackListFragment extends Fragment {
         mAdapter.update(mResults);
         mAdapter.notifyDataSetChanged();
 
-        if(mResults == null || mResults.tracks.size() == 0){
+        if(mResults == null || mResults.length == 0){
             Toast.makeText(getActivity(),"No Top Track(s) Found",Toast.LENGTH_SHORT).show();
         }
 
