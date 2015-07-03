@@ -26,6 +26,7 @@ public class TopTracksActivity extends ActionBarActivity {
     private String mArtistID;
     private TrackListFragment mTrackListFragment;
     private static final String TRACKS = "TRACKS";
+    private Tracks mTracksResults;
 
 
     @Override
@@ -34,9 +35,6 @@ public class TopTracksActivity extends ActionBarActivity {
         setContentView(R.layout.activity_top_tracks);
 
         setTitle("Top 10 Tracks");
-
-        SpotifyApi api = new SpotifyApi();
-        final SpotifyService spotifyService = api.getService();
 
         mTrackListFragment = new TrackListFragment();
         getFragmentManager().beginTransaction().
@@ -47,6 +45,14 @@ public class TopTracksActivity extends ActionBarActivity {
         bundle = intent.getExtras();
         mArtistID = bundle.get(ArtistListFragment.ARTISTID) + "";
         getSupportActionBar().setSubtitle(bundle.get(ArtistListFragment.ARTISTNAME) + "");
+
+        getTracksResults();
+    }
+
+    private void getTracksResults(){
+
+        SpotifyApi api = new SpotifyApi();
+        final SpotifyService spotifyService = api.getService();
 
         Map<String,Object> options= new HashMap<>();
         options.put("country", "US");
@@ -69,7 +75,8 @@ public class TopTracksActivity extends ActionBarActivity {
 
             @Override
             public void success(Tracks tracks, Response response) {
-                mTrackListFragment.setResults(tracks);
+                mTracksResults = tracks;
+                mTrackListFragment.setResults(setTracksList());
 
                 runOnUiThread(new Runnable() {
                     @Override
@@ -82,7 +89,32 @@ public class TopTracksActivity extends ActionBarActivity {
 
             }
         });
+    }
 
+    private TracksP[] setTracksList(){
+        TracksP[] tracksPs;
+
+        if(mTracksResults!=null){
+            int size  = mTracksResults.tracks.size();
+            tracksPs = new TracksP[size];
+
+            for(int i = 0;i<size;i++){
+                TracksP tracksP = new TracksP();
+                tracksP.setAlbumName(mTracksResults.tracks.get(i).album.name);
+                tracksP.setTrackName(mTracksResults.tracks.get(i).name);
+                try {
+                    tracksP.setAlbumImageID(mTracksResults.tracks.get(i).album.images.get(0).url);
+                } catch (IndexOutOfBoundsException iob){
+                    Log.d("NO_IMAGE",iob.toString());
+                }
+
+                tracksPs[i] = tracksP;
+            }
+        } else{
+            tracksPs = null;
+        }
+
+        return tracksPs;
     }
 
     @Override
