@@ -27,6 +27,7 @@ public class TopTracksActivity extends ActionBarActivity {
     private TrackListFragment mTrackListFragment;
     private static final String TRACKS = "TRACKS";
     private Tracks mTracksResults;
+    private String mArtistName;
 
 
     @Override
@@ -44,7 +45,8 @@ public class TopTracksActivity extends ActionBarActivity {
         Intent intent = getIntent();
         bundle = intent.getExtras();
         mArtistID = bundle.get(ArtistListFragment.ARTISTID) + "";
-        getSupportActionBar().setSubtitle(bundle.get(ArtistListFragment.ARTISTNAME) + "");
+        mArtistName = bundle.get(ArtistListFragment.ARTISTNAME) +"";
+        getSupportActionBar().setSubtitle(mArtistName);
 
         getTracksResults();
     }
@@ -102,6 +104,8 @@ public class TopTracksActivity extends ActionBarActivity {
                 TracksP tracksP = new TracksP();
                 tracksP.setAlbumName(mTracksResults.tracks.get(i).album.name);
                 tracksP.setTrackName(mTracksResults.tracks.get(i).name);
+                tracksP.setPreviewURL(mTracksResults.tracks.get(i).preview_url);
+                tracksP.setArtistName(mArtistName);
                 try {
                     tracksP.setAlbumImageID(mTracksResults.tracks.get(i).album.images.get(0).url);
                 } catch (IndexOutOfBoundsException iob){

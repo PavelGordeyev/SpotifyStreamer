@@ -11,6 +11,8 @@ public class TracksP implements Parcelable {
     private String mAlbumName;
     private String mTrackName;
     private String mAlbumImageID;
+    private String mPreviewURL;
+    private String mArtistName;
 
     public String getAlbumImageID() {
         return mAlbumImageID;
@@ -36,6 +38,22 @@ public class TracksP implements Parcelable {
         mTrackName = trackName;
     }
 
+    public String getPreviewURL() {
+        return mPreviewURL;
+    }
+
+    public void setPreviewURL(String previewURL) {
+        mPreviewURL = previewURL;
+    }
+
+    public String getArtistName() {
+        return mArtistName;
+    }
+
+    public void setArtistName(String artistName) {
+        mArtistName = artistName;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -46,12 +64,14 @@ public class TracksP implements Parcelable {
         dest.writeString(mAlbumName);
         dest.writeString(mTrackName);
         dest.writeString(mAlbumImageID);
+        dest.writeString(mPreviewURL);
     }
 
     private TracksP(Parcel in){
         mAlbumName = in.readString();
         mTrackName = in.readString();
         mAlbumImageID = in.readString();
+        mPreviewURL = in.readString();
     }
 
     public TracksP(){}

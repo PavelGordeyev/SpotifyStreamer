@@ -1,0 +1,55 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                tools:context="pashapps.spotifystreamer.TrackPlayerFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/albumLabel"
+        android:layout_centerHorizontal="true"
+        android:layout_alignRight="@+id/albumImageView"
+        android:layout_marginTop="50dp"
+        tools:text="Stadium Arcadium"/>
+
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:id="@+id/albumImageView"
+        android:layout_below="@id/albumLabel"
+        android:layout_centerHorizontal="true"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/artistLabel"
+        android:layout_below="@+id/albumImageView"
+        android:layout_centerHorizontal="true"
+        android:layout_alignLeft="@+id/albumImageView"
+        tools:text="Red Hot Chili Peppers"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/trackLabel"
+        android:layout_below="@+id/artistLabel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        tools:text="Especially in Michigan"
+        android:textSize="25sp"/>
+
+   <!-- <MediaController
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/mediaController"
+        android:layout_below="@id/trackLabel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"/>-->
+
+</RelativeLayout>

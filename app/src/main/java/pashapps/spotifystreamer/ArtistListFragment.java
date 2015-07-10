@@ -3,6 +3,7 @@ package pashapps.spotifystreamer;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,7 @@ public class ArtistListFragment extends Fragment {
         View view = inflater.inflate(R.layout.artist_list_fragment,container,false);
 
         mArtistListView = (ListView) view.findViewById(R.id.artistList);
+        Parcelable[] parcelables = mResults;
         mAdapter = new ArtistAdapter(getActivity(),mResults);
         mArtistListView.setAdapter(mAdapter);
         return view;

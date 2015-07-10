@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,6 +23,10 @@ public class TrackListFragment extends Fragment {
     private ListView mTrackListView;
     private TracksAdapter mAdapter;
     private TracksP[] mResults;
+    public static final String ALBUM = "ALBUM";
+    public static final String TRACK = "TRACK";
+    public static final String ARTIST = "ARTIST";
+    public static final String IMAGEID = "IMAGE_ID";
 
     public TrackListFragment() {
     }
@@ -36,6 +41,26 @@ public class TrackListFragment extends Fragment {
         mTrackListView.setAdapter(mAdapter);
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        mTrackListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("TRACKURL",mResults[position].getPreviewURL());
+                Intent intent = new Intent(getActivity(),TrackPreviewPlayer.class);
+                intent.putExtra(ALBUM,mResults[position].getAlbumName());
+                intent.putExtra(TRACK,mResults[position].getTrackName());
+                intent.putExtra(ARTIST,mResults[position].getArtistName());
+                try {
+                    intent.putExtra(IMAGEID, mResults[position].getAlbumImageID());
+                }catch(IndexOutOfBoundsException iob){
+                    Log.d("IMAGE_ERR", iob.toString());
+                }
+                startActivity(intent);
+            }
+        });
     }
 
     public void setResults(TracksP[] results){
