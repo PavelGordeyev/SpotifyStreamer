@@ -1,7 +1,6 @@
-package pashapps.spotifystreamer;
+package pashapps.spotifystreamer.Fragments;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +11,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import kaaes.spotify.webapi.android.models.Tracks;
+import pashapps.spotifystreamer.Adapters.TracksAdapter;
+import pashapps.spotifystreamer.R;
+import pashapps.spotifystreamer.Activities.TrackPreviewPlayer;
+import pashapps.spotifystreamer.TracksP;
 
 
 /**
@@ -27,6 +29,7 @@ public class TrackListFragment extends Fragment {
     public static final String TRACK = "TRACK";
     public static final String ARTIST = "ARTIST";
     public static final String IMAGEID = "IMAGE_ID";
+    public static final String TRACKURL = "TRACKURL";
 
     public TrackListFragment() {
     }
@@ -45,6 +48,7 @@ public class TrackListFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+
         mTrackListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -53,6 +57,7 @@ public class TrackListFragment extends Fragment {
                 intent.putExtra(ALBUM,mResults[position].getAlbumName());
                 intent.putExtra(TRACK,mResults[position].getTrackName());
                 intent.putExtra(ARTIST,mResults[position].getArtistName());
+                intent.putExtra(TRACKURL,mResults[position].getPreviewURL());
                 try {
                     intent.putExtra(IMAGEID, mResults[position].getAlbumImageID());
                 }catch(IndexOutOfBoundsException iob){

@@ -1,4 +1,4 @@
-package pashapps.spotifystreamer;
+package pashapps.spotifystreamer.Fragments;
 
 import android.app.Fragment;
 import android.content.Intent;
@@ -12,7 +12,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import kaaes.spotify.webapi.android.models.ArtistsPager;
+import pashapps.spotifystreamer.Adapters.ArtistAdapter;
+import pashapps.spotifystreamer.ArtistP;
+import pashapps.spotifystreamer.R;
+import pashapps.spotifystreamer.Activities.TopTracksActivity;
 
 
 public class ArtistListFragment extends Fragment {

@@ -6,7 +6,7 @@
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:paddingBottom="@dimen/activity_vertical_margin"
-                tools:context="pashapps.spotifystreamer.TrackPlayerFragment">
+                tools:context="pashapps.spotifystreamer.Fragments.TrackPlayerFragment">
 
     <TextView
         android:layout_width="wrap_content"
@@ -14,7 +14,7 @@
         android:id="@+id/albumLabel"
         android:layout_centerHorizontal="true"
         android:layout_alignRight="@+id/albumImageView"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
         tools:text="Stadium Arcadium"/>
 
     <ImageView
@@ -44,12 +44,41 @@
         tools:text="Especially in Michigan"
         android:textSize="25sp"/>
 
-   <!-- <MediaController
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/mediaController"
-        android:layout_below="@id/trackLabel"
+    <Button
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/playButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"/>-->
+        android:layout_below="@+id/trackLabel"
+        android:background="@android:drawable/ic_media_play"
+        android:layout_marginTop="60dp"
+        />
+    <Button
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/pauseButton"
+        android:layout_centerHorizontal="true"
+        android:background="@android:drawable/ic_media_pause"
+        android:layout_alignTop="@+id/playButton"
+        android:layout_alignLeft="@+id/playButton"/>
+
+    <Button
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@android:drawable/ic_media_next"
+        android:id="@+id/nextButton"
+        android:layout_toRightOf="@+id/playButton"
+        android:layout_toEndOf="@+id/playButton"
+        android:layout_marginLeft="80dp"
+        android:layout_alignTop="@+id/playButton"/>
+
+    <Button
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/previousButton"
+        android:background="@android:drawable/ic_media_previous"
+        android:layout_alignTop="@+id/playButton"
+        android:layout_toLeftOf="@+id/playButton"
+        android:layout_marginRight="80dp"/>
 
 </RelativeLayout>

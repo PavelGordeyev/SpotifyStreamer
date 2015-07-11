@@ -1,4 +1,4 @@
-package pashapps.spotifystreamer;
+package pashapps.spotifystreamer.Activities;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -14,15 +14,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyCallback;
 import kaaes.spotify.webapi.android.SpotifyError;
 import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.ArtistsPager;
-import kaaes.spotify.webapi.android.models.Image;
+import pashapps.spotifystreamer.ArtistP;
+import pashapps.spotifystreamer.Fragments.ArtistListFragment;
+import pashapps.spotifystreamer.R;
 import retrofit.client.Response;
 
 

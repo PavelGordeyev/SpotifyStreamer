@@ -11,7 +11,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".Activities.MainActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name" >
             <intent-filter>
@@ -21,21 +21,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TopTracksActivity"
+            android:name=".Activities.TopTracksActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_top_tracks"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".Activities.MainActivity" >
         </activity>
         <activity
-            android:name=".TrackPlayerFragment"
+            android:name=".Fragments.TrackPlayerFragment"
             android:label="@string/title_activity_track_player"
-            android:parentActivityName=".TopTracksActivity" >
+            android:parentActivityName=".Activities.TopTracksActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="pashapps.spotifystreamer.TopTracksActivity" />
+                android:value=".Activities.TopTracksActivity" />
         </activity>
         <activity
-            android:name=".TrackPreviewPlayer"
+            android:name=".Activities.TrackPreviewPlayer"
             android:label="@string/title_activity_track_preview_player" >
         </activity>
     </application>

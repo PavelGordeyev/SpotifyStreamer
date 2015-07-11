@@ -1,7 +1,6 @@
-package pashapps.spotifystreamer;
+package pashapps.spotifystreamer.Adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,37 +8,34 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
-
-import kaaes.spotify.webapi.android.models.Artist;
-import kaaes.spotify.webapi.android.models.ArtistsPager;
+import kaaes.spotify.webapi.android.models.Tracks;
 import pashapps.spotifystreamer.R;
+import pashapps.spotifystreamer.TracksP;
 
 /**
- * Created by pavelG on 6/9/15.
+ * Created by pavelG on 6/14/15.
  */
-public class ArtistAdapter extends BaseAdapter{
+public class TracksAdapter extends BaseAdapter{
 
     private Context mContext;
-    private ArtistP[] mResults;
+    private TracksP[] mResults;
     private int mCount;
 
-
-    public ArtistAdapter(Context context, ArtistP[] results) {
+    public TracksAdapter(Context context,TracksP[] tracks) {
         mContext = context;
-        mResults = results;
-
+        mResults = tracks;
     }
 
-    public void setCount(int count){
+    public void setCount(int count) {
         mCount = count;
     }
-
     @Override
     public int getCount() {
+
         if (mResults==null || mCount==0) {
             return 0;
         } else {
@@ -62,20 +58,21 @@ public class ArtistAdapter extends BaseAdapter{
         ViewHolder holder;
 
         if(convertView==null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.artist_list_item,null);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.track_list_item,null);
             holder = new ViewHolder();
-            holder.artistImageView = (ImageView) convertView.findViewById(R.id.artistImageView);
-            holder.artistLabel = (TextView) convertView.findViewById(R.id.artistLabel);
+            holder.albumImageView = (ImageView) convertView.findViewById(R.id.albumImageView);
+            holder.albumLabel = (TextView) convertView.findViewById(R.id.albumLabel);
+            holder.trackLabel = (TextView) convertView.findViewById(R.id.trackLabel);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
         if(mResults!=null) {
-            holder.artistLabel.setText(mResults[position].getName());
             try {
-                Log.d("IMAGE", mResults[position].getArtistID());
-                Picasso.with(mContext).load(mResults[position].getImageID()).into(holder.artistImageView);
+                holder.albumLabel.setText(mResults[position].getAlbumName());
+                holder.trackLabel.setText(mResults[position].getTrackName());
+                Picasso.with(mContext).load(mResults[position].getAlbumImageID()).into(holder.albumImageView);
             } catch(IndexOutOfBoundsException npe) {
                 Log.d("IMAGE_ERR", npe.toString());
             }
@@ -83,18 +80,16 @@ public class ArtistAdapter extends BaseAdapter{
         } else{
             return convertView;
         }
-
     }
-
-    public void update(ArtistP[] artistPs) throws NullPointerException{
-        mResults = artistPs;
-    }
-
 
     private class ViewHolder {
-        ImageView artistImageView;
-        TextView artistLabel;
+        ImageView albumImageView;
+        TextView albumLabel;
+        TextView trackLabel;
     }
 
-
+    public void update(TracksP[] tracks) throws NullPointerException{
+        mResults = tracks;
+    }
 }
+

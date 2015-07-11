@@ -1,4 +1,4 @@
-package pashapps.spotifystreamer;
+package pashapps.spotifystreamer.Activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +18,10 @@ import kaaes.spotify.webapi.android.SpotifyCallback;
 import kaaes.spotify.webapi.android.SpotifyError;
 import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.Tracks;
+import pashapps.spotifystreamer.Fragments.ArtistListFragment;
+import pashapps.spotifystreamer.Fragments.TrackListFragment;
+import pashapps.spotifystreamer.R;
+import pashapps.spotifystreamer.TracksP;
 import retrofit.client.Response;
 
 
