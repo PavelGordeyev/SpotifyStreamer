@@ -4,14 +4,18 @@ import android.app.Fragment;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 
@@ -25,11 +29,14 @@ public class TrackPlayerFragment extends Fragment{
     private TextView mArtistLabel;
     private TextView mAlbumLabel;
     private TextView mTrackLabel;
+    private TextView mCurrentTimeLabel;
+    private TextView mEndTimeLabel;
     private ImageView mAlbumImageView;
     private Button mPlayButton;
     private Button mPauseButton;
     private Button mNextButton;
     private Button mPreviousButton;
+    private SeekBar mSeekBar;
     private String mArtist;
     private String mAlbum;
     private String mTrack;
@@ -37,23 +44,41 @@ public class TrackPlayerFragment extends Fragment{
     private String mTrackURL;
     private int mPosition;
     private MediaPlayer mp;
-
+    private Handler mHandler;
 
     public TrackPlayerFragment(){}
+
+    private Runnable mSeekBarRunnable = new Runnable() {
+        @Override
+        public void run() {
+            updateProgress();
+        }
+    };
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_track_player_fragment, container, false);
+        mHandler = new Handler();
 
+        //Track
         mArtistLabel = (TextView)view.findViewById(R.id.artistLabel);
         mAlbumLabel = (TextView)view.findViewById(R.id.albumLabel);
         mTrackLabel = (TextView)view.findViewById(R.id.trackLabel);
         mAlbumImageView = (ImageView)view.findViewById(R.id.albumImageView);
+
+        //Seek Bar
+        mCurrentTimeLabel = (TextView)view.findViewById(R.id.currentTimeLabel);
+        mEndTimeLabel = (TextView)view.findViewById(R.id.endTimeLabel);
+        mSeekBar = (SeekBar)view.findViewById(R.id.trackSeekBar);
+
+        //Play Buttons
         mPlayButton = (Button)view.findViewById(R.id.playButton);
         mPauseButton = (Button)view.findViewById(R.id.pauseButton);
         mNextButton = (Button)view.findViewById(R.id.nextButton);
         mPreviousButton = (Button)view.findViewById(R.id.previousButton);
+
 
         //When created hide play button
         mPlayButton.setVisibility(View.INVISIBLE);
@@ -68,22 +93,65 @@ public class TrackPlayerFragment extends Fragment{
         } catch(NullPointerException npe) {
             Log.d("IMAGE_ERR", npe.toString());
         }
+        /*
+        mSeekBarRunnable = new Runnable() {
 
-        mp = new MediaPlayer();
-        mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        try {
-            mp.setDataSource(mTrackURL);
-        }catch(IOException ioe){
-            Log.d("Media Player",ioe.toString());
-        }
-        mp.prepareAsync();
+            public void run() {
+                mHandler.postDelayed(this,1000);
 
-        mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                mCurrentTimeLabel.setText(timeConvert(mp.getCurrentPosition()));
+                mSeekBar.setProgress(timeProgress(mp.getCurrentPosition(), mp.getDuration()));
+
+                mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        if (fromUser) {
+                            mSeekBar.setProgress(progress);
+                        }else{
+                            mCurrentTimeLabel.setText(timeConvert(mp.getCurrentPosition()));
+                            mSeekBar.setProgress(timeProgress(mp.getCurrentPosition(), mp.getDuration()));
+                        }
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+
+                    }
+                });
+
+            }
+        };
+*/
+        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onPrepared(MediaPlayer mp) {
-                mp.start();
+            public void onProgressChanged(SeekBar seekBar, final int progress, final boolean fromUser) {
+                if(fromUser){
+                    mp.seekTo(progress*1000);
+                    mSeekBar.setProgress(progress*1000);
+                    mCurrentTimeLabel.setText(timeConvert(progress*1000));
+                }else{
+                    updateProgress();
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
+
+        mediaPlayerControl();
+
 
         //Button controls
         mPauseButton.setOnClickListener(new View.OnClickListener() {
@@ -123,6 +191,13 @@ public class TrackPlayerFragment extends Fragment{
                     buttonToggle("play");
                 }
                 //trackControl(mPosition);
+            }
+        });
+
+        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                buttonToggle("pause");
             }
         });
 
@@ -178,7 +253,10 @@ public class TrackPlayerFragment extends Fragment{
         //Stop previous song
         mp.stop();
         mp.release();
+        mediaPlayerControl();
+    }
 
+    public void mediaPlayerControl(){
         mp = new MediaPlayer();
 
         //Start current song
@@ -192,10 +270,43 @@ public class TrackPlayerFragment extends Fragment{
         mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
+                //Set seek bar attributes
+                mSeekBar.setMax(mp.getDuration() / 1000);
+                mEndTimeLabel.setText(timeConvert(mp.getDuration()));
+                mHandler.postDelayed(mSeekBarRunnable, 1000);
                 mp.start();
             }
         });
+    }
+
+    public String timeConvert(int seconds){
+        String timeString;
+
+        seconds = seconds/1000;
+        if(seconds<10) {
+            timeString = "0:0" + seconds;
+        }else{
+            timeString = "0:" + seconds;
+        }
+        return timeString;
+    }
+
+    public int timeProgress(int currentPosition, int duration){
+
+
+        double percentage = (double)currentPosition/(double)duration;
+        int progress = (int) (percentage * mSeekBar.getMax());
+        return progress;
+
+    }
+
+    private void updateProgress() {
+        //mHandler.removeCallbacks(mSeekBarRunnable);
+        mSeekBar.setProgress(timeProgress(mp.getCurrentPosition(), mp.getDuration()));
+        mCurrentTimeLabel.setText(timeConvert(mp.getCurrentPosition()));
+        mHandler.postDelayed(mSeekBarRunnable,1000);
 
 
     }
+
 }
