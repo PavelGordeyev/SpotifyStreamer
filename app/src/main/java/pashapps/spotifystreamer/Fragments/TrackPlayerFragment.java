@@ -35,6 +35,7 @@ public class TrackPlayerFragment extends Fragment{
     private String mTrack;
     private String mImageID;
     private String mTrackURL;
+    private int mPosition;
     private MediaPlayer mp;
 
 
@@ -76,6 +77,7 @@ public class TrackPlayerFragment extends Fragment{
             Log.d("Media Player",ioe.toString());
         }
         mp.prepareAsync();
+
         mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
@@ -83,6 +85,7 @@ public class TrackPlayerFragment extends Fragment{
             }
         });
 
+        //Button controls
         mPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,25 +105,37 @@ public class TrackPlayerFragment extends Fragment{
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(mPosition!=TrackListFragment.mResults.length-1) {
+                    mPosition++;
+                    trackControl(mPosition);
+                    buttonToggle("play");
+                }
+                //trackControl(mPosition);
             }
         });
 
         mPreviousButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(mPosition>0) {
+                    mPosition--;
+                    trackControl(mPosition);
+                    buttonToggle("play");
+                }
+                //trackControl(mPosition);
             }
         });
+
         return view;
     }
 
-    public void updateFragment(String artist,String album,String track,String imageID, String trackURL){
-        mArtist = artist;
-        mAlbum = album;
-        mTrack = track;
-        mImageID = imageID;
-        mTrackURL = trackURL;
+    public void updateFragment(int position){
+        mArtist = TrackListFragment.mResults[position].getArtistName();
+        mAlbum = TrackListFragment.mResults[position].getAlbumName();
+        mTrack = TrackListFragment.mResults[position].getTrackName();
+        mImageID = TrackListFragment.mResults[position].getAlbumImageID();
+        mTrackURL = TrackListFragment.mResults[position].getPreviewURL();
+        mPosition = position;
     }
 
     @Override
@@ -138,5 +153,49 @@ public class TrackPlayerFragment extends Fragment{
             mPauseButton.setVisibility(View.INVISIBLE);
             mPlayButton.setVisibility(View.VISIBLE);
         }
+    }
+
+    //Go onto the next or previous track
+    public void trackControl(int position){
+
+        //User interface update to album, artist and track
+        try {
+            mTrackLabel.setText(TrackListFragment.mResults[position].getTrackName());
+            mArtistLabel.setText(TrackListFragment.mResults[position].getArtistName());
+            mAlbumLabel.setText(TrackListFragment.mResults[position].getAlbumName());
+            mTrackURL = TrackListFragment.mResults[position].getPreviewURL();
+            try {
+                Picasso.with(getActivity()).load(TrackListFragment.mResults[position].getAlbumImageID()).into(mAlbumImageView);
+            } catch (NullPointerException npe) {
+                Log.d("IMAGE_ERR", npe.toString());
+            }
+        } catch (IndexOutOfBoundsException iob) {
+            Log.d("TRACK_PLAYER", iob.toString());
+        }
+
+        //Media player controls to change song
+
+        //Stop previous song
+        mp.stop();
+        mp.release();
+
+        mp = new MediaPlayer();
+
+        //Start current song
+        try {
+            mp.setDataSource(mTrackURL);
+        } catch (IOException ioe) {
+            Log.d("Media Player", ioe.toString());
+        }
+        mp.prepareAsync();
+
+        mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.start();
+            }
+        });
+
+
     }
 }

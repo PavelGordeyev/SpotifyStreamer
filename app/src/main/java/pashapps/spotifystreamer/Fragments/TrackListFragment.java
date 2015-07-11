@@ -24,12 +24,8 @@ public class TrackListFragment extends Fragment {
 
     private ListView mTrackListView;
     private TracksAdapter mAdapter;
-    private TracksP[] mResults;
-    public static final String ALBUM = "ALBUM";
-    public static final String TRACK = "TRACK";
-    public static final String ARTIST = "ARTIST";
-    public static final String IMAGEID = "IMAGE_ID";
-    public static final String TRACKURL = "TRACKURL";
+    public static TracksP[] mResults;
+    public static final String POSITION = "POSITION";
 
     public TrackListFragment() {
     }
@@ -52,17 +48,8 @@ public class TrackListFragment extends Fragment {
         mTrackListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("TRACKURL",mResults[position].getPreviewURL());
                 Intent intent = new Intent(getActivity(),TrackPreviewPlayer.class);
-                intent.putExtra(ALBUM,mResults[position].getAlbumName());
-                intent.putExtra(TRACK,mResults[position].getTrackName());
-                intent.putExtra(ARTIST,mResults[position].getArtistName());
-                intent.putExtra(TRACKURL,mResults[position].getPreviewURL());
-                try {
-                    intent.putExtra(IMAGEID, mResults[position].getAlbumImageID());
-                }catch(IndexOutOfBoundsException iob){
-                    Log.d("IMAGE_ERR", iob.toString());
-                }
+                intent.putExtra(POSITION,position);
                 startActivity(intent);
             }
         });

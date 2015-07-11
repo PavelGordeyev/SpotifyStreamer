@@ -3,6 +3,7 @@ package pashapps.spotifystreamer.Activities;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -14,12 +15,7 @@ import pashapps.spotifystreamer.R;
 public class TrackPreviewPlayer extends ActionBarActivity {
 
     private TrackPlayerFragment mTrackPlayerFragment;
-    private String mArtistName;
-    private String mTrackName;
-    private String mAlbumName;
-    private String mImageID;
-    private String mTrackURL;
-
+    private int position;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,16 +26,10 @@ public class TrackPreviewPlayer extends ActionBarActivity {
         bundle = intent.getExtras();
         setTitle(R.string.app_name);
 
-        mArtistName = bundle.get(TrackListFragment.ARTIST) + "";
-        mTrackName = bundle.get(TrackListFragment.TRACK) + "";
-        mAlbumName = bundle.get(TrackListFragment.ALBUM) + "";
-        mImageID = bundle.get(TrackListFragment.IMAGEID) + "";
-        mTrackURL = bundle.get(TrackListFragment.TRACKURL) + "";
-
-
+        position = (int)bundle.get(TrackListFragment.POSITION);
 
         mTrackPlayerFragment = new TrackPlayerFragment();
-        mTrackPlayerFragment.updateFragment(mArtistName,mAlbumName,mTrackName,mImageID,mTrackURL);
+        mTrackPlayerFragment.updateFragment(position);
         getFragmentManager().beginTransaction().
                 add(R.id.trackPlayerContainer, mTrackPlayerFragment).commit();
     }
