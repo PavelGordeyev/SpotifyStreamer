@@ -17,8 +17,8 @@
         tools:text="Stadium Arcadium"/>
 
     <ImageView
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="280dp"
+        android:layout_height="280dp"
         android:id="@+id/albumImageView"
         android:layout_below="@id/albumLabel"
         android:layout_centerHorizontal="true"
@@ -39,13 +39,13 @@
         android:id="@+id/trackLabel"
         android:layout_below="@+id/artistLabel"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         tools:text="Especially in Michigan"
         android:textSize="25sp"/>
 
     <Button
         android:layout_width="45dp"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:id="@+id/playButton"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/trackLabel"
@@ -54,7 +54,7 @@
         />
     <Button
         android:layout_width="45dp"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:id="@+id/pauseButton"
         android:layout_centerHorizontal="true"
         android:background="@android:drawable/ic_media_pause"
@@ -63,7 +63,7 @@
 
     <Button
         android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:background="@android:drawable/ic_media_next"
         android:id="@+id/nextButton"
         android:layout_toRightOf="@+id/playButton"
@@ -73,7 +73,7 @@
 
     <Button
         android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:id="@+id/previousButton"
         android:background="@android:drawable/ic_media_previous"
         android:layout_alignTop="@+id/playButton"
