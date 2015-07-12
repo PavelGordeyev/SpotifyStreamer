@@ -93,40 +93,7 @@ public class TrackPlayerFragment extends Fragment{
         } catch(NullPointerException npe) {
             Log.d("IMAGE_ERR", npe.toString());
         }
-        /*
-        mSeekBarRunnable = new Runnable() {
 
-            public void run() {
-                mHandler.postDelayed(this,1000);
-
-                mCurrentTimeLabel.setText(timeConvert(mp.getCurrentPosition()));
-                mSeekBar.setProgress(timeProgress(mp.getCurrentPosition(), mp.getDuration()));
-
-                mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        if (fromUser) {
-                            mSeekBar.setProgress(progress);
-                        }else{
-                            mCurrentTimeLabel.setText(timeConvert(mp.getCurrentPosition()));
-                            mSeekBar.setProgress(timeProgress(mp.getCurrentPosition(), mp.getDuration()));
-                        }
-                    }
-
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-
-                    }
-
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-
-                    }
-                });
-
-            }
-        };
-*/
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, final int progress, final boolean fromUser) {
@@ -301,7 +268,7 @@ public class TrackPlayerFragment extends Fragment{
     }
 
     private void updateProgress() {
-        //mHandler.removeCallbacks(mSeekBarRunnable);
+        mHandler.removeCallbacks(mSeekBarRunnable);
         mSeekBar.setProgress(timeProgress(mp.getCurrentPosition(), mp.getDuration()));
         mCurrentTimeLabel.setText(timeConvert(mp.getCurrentPosition()));
         mHandler.postDelayed(mSeekBarRunnable,1000);
