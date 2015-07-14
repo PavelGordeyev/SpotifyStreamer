@@ -62,6 +62,7 @@ public class TracksP implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mAlbumName);
+        dest.writeString(mArtistName);
         dest.writeString(mTrackName);
         dest.writeString(mAlbumImageID);
         dest.writeString(mPreviewURL);
@@ -69,6 +70,7 @@ public class TracksP implements Parcelable {
 
     private TracksP(Parcel in){
         mAlbumName = in.readString();
+        mArtistName = in.readString();
         mTrackName = in.readString();
         mAlbumImageID = in.readString();
         mPreviewURL = in.readString();

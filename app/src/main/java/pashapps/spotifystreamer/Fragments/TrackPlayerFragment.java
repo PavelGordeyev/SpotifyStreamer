@@ -22,6 +22,7 @@ import java.io.IOException;
 import butterknife.InjectView;
 import kaaes.spotify.webapi.android.models.Image;
 import pashapps.spotifystreamer.R;
+import pashapps.spotifystreamer.TracksP;
 
 
 public class TrackPlayerFragment extends Fragment{
@@ -45,6 +46,7 @@ public class TrackPlayerFragment extends Fragment{
     private int mPosition;
     private MediaPlayer mp;
     private Handler mHandler;
+    private TracksP[] mTracksPs;
 
     public TrackPlayerFragment(){}
 
@@ -117,7 +119,10 @@ public class TrackPlayerFragment extends Fragment{
             }
         });
 
-        mediaPlayerControl();
+        try{
+            mediaPlayerControl();
+        }catch(NullPointerException npe){
+        }
 
 
         //Button controls
@@ -168,16 +173,29 @@ public class TrackPlayerFragment extends Fragment{
             }
         });
 
+        getFragmentManager().beginTransaction().addToBackStack(null).commit();
+
         return view;
     }
 
-    public void updateFragment(int position){
-        mArtist = TrackListFragment.mResults[position].getArtistName();
-        mAlbum = TrackListFragment.mResults[position].getAlbumName();
-        mTrack = TrackListFragment.mResults[position].getTrackName();
-        mImageID = TrackListFragment.mResults[position].getAlbumImageID();
-        mTrackURL = TrackListFragment.mResults[position].getPreviewURL();
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+        //updateFragment(mTracksPs,mPosition);
+        /*if(savedInstanceState==null) {
+            getFragmentManager().beginTransaction().add(R.id.trackPlayerContainer, this).commit();
+        }*/
+    }
+
+    public void updateFragment(TracksP[] tracks,int position){
+        mArtist = tracks[position].getArtistName();
+        mAlbum = tracks[position].getAlbumName();
+        mTrack = tracks[position].getTrackName();
+        mImageID = tracks[position].getAlbumImageID();
+        mTrackURL = tracks[position].getPreviewURL();
         mPosition = position;
+        mTracksPs = tracks;
     }
 
     @Override
@@ -272,8 +290,6 @@ public class TrackPlayerFragment extends Fragment{
         mSeekBar.setProgress(timeProgress(mp.getCurrentPosition(), mp.getDuration()));
         mCurrentTimeLabel.setText(timeConvert(mp.getCurrentPosition()));
         mHandler.postDelayed(mSeekBarRunnable,1000);
-
-
     }
 
 }

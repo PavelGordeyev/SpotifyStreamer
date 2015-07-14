@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import pashapps.spotifystreamer.Activities.MainActivity;
 import pashapps.spotifystreamer.Adapters.ArtistAdapter;
 import pashapps.spotifystreamer.ArtistP;
 import pashapps.spotifystreamer.R;
@@ -26,6 +27,7 @@ public class ArtistListFragment extends Fragment {
     private String mArtistID;
     private String mArtistName;
 
+
     public static final String ARTISTID = "ARTIST ID";
     public static final String ARTISTNAME = "ARTIST NAME";
 
@@ -36,7 +38,6 @@ public class ArtistListFragment extends Fragment {
         View view = inflater.inflate(R.layout.artist_list_fragment,container,false);
 
         mArtistListView = (ListView) view.findViewById(R.id.artistList);
-        Parcelable[] parcelables = mResults;
         mAdapter = new ArtistAdapter(getActivity(),mResults);
         mArtistListView.setAdapter(mAdapter);
         return view;
@@ -45,15 +46,25 @@ public class ArtistListFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+
         mArtistListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mArtistID = mResults[position].getArtistID();
                 mArtistName = mResults[position].getName();
-                Intent intent = new Intent(getActivity(),TopTracksActivity.class);
-                intent.putExtra(ARTISTID, mArtistID);
-                intent.putExtra(ARTISTNAME,mArtistName);
-                startActivity(intent);
+
+                if(MainActivity.mTwoPane){
+                    TopTracksActivity topTracksActivity = new TopTracksActivity();
+                    topTracksActivity.getTracksResults();
+                    //TrackListFragment trackListFragment = new TrackListFragment();
+                    //trackListFragment.setResults(topTracksActivity.getTracksResults());
+                    //getFragmentManager().beginTransaction().add(R.id.trackFragmentContainer,trackListFragment);
+                }else {
+                    Intent intent = new Intent(getActivity(), TopTracksActivity.class);
+                    intent.putExtra(ARTISTID, mArtistID);
+                    intent.putExtra(ARTISTNAME, mArtistName);
+                    startActivity(intent);
+                }
             }
         });
     }

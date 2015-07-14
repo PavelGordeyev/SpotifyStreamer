@@ -1,21 +1,28 @@
 package pashapps.spotifystreamer.Activities;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Arrays;
+
 import pashapps.spotifystreamer.Fragments.TrackListFragment;
 import pashapps.spotifystreamer.Fragments.TrackPlayerFragment;
 import pashapps.spotifystreamer.R;
+import pashapps.spotifystreamer.TracksP;
 
 
 public class TrackPreviewPlayer extends ActionBarActivity {
 
     private TrackPlayerFragment mTrackPlayerFragment;
     private int position;
+    private TracksP[] mResults;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,15 +30,25 @@ public class TrackPreviewPlayer extends ActionBarActivity {
 
         Bundle bundle;
         Intent intent = getIntent();
+        Parcelable[] parcelables = intent.getParcelableArrayExtra(TrackListFragment.TRACKLIST);
+        mResults = Arrays.copyOf(parcelables, parcelables.length, TracksP[].class);
+
         bundle = intent.getExtras();
         setTitle(R.string.app_name);
 
         position = (int)bundle.get(TrackListFragment.POSITION);
+        Log.d("URL",mResults[position].getPreviewURL());
 
-        mTrackPlayerFragment = new TrackPlayerFragment();
-        mTrackPlayerFragment.updateFragment(position);
-        getFragmentManager().beginTransaction().
-                add(R.id.trackPlayerContainer, mTrackPlayerFragment).commit();
+        if (savedInstanceState == null) {
+            mTrackPlayerFragment = new TrackPlayerFragment();
+            mTrackPlayerFragment.updateFragment(mResults, position);
+            FragmentTransaction ft = getFragmentManager().beginTransaction().add(R.id.trackPlayerContainer, mTrackPlayerFragment);
+            //ft.addToBackStack(null);
+            ft.commit();
+        }
+            //getFragmentManager().beginTransaction().
+                   // add(R.id.trackPlayerContainer, mTrackPlayerFragment).commit();
+
     }
 
     @Override

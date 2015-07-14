@@ -26,6 +26,7 @@ public class TrackListFragment extends Fragment {
     private TracksAdapter mAdapter;
     public static TracksP[] mResults;
     public static final String POSITION = "POSITION";
+    public static final String TRACKLIST = "TRACKLIST";
 
     public TrackListFragment() {
     }
@@ -48,7 +49,9 @@ public class TrackListFragment extends Fragment {
         mTrackListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 Intent intent = new Intent(getActivity(),TrackPreviewPlayer.class);
+                intent.putExtra(TRACKLIST,mResults);
                 intent.putExtra(POSITION,position);
                 startActivity(intent);
             }

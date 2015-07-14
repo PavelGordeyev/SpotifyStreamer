@@ -1,5 +1,6 @@
 package pashapps.spotifystreamer.Activities;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -31,6 +32,7 @@ public class MainActivity extends ActionBarActivity implements View.OnFocusChang
     private EditText mArtistSearch;
     private ArtistListFragment mArtistListFragment;
     private ArtistsPager mArtistResults;
+    public static Boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +41,14 @@ public class MainActivity extends ActionBarActivity implements View.OnFocusChang
 
         mArtistSearch = (EditText) findViewById(R.id.searchEditTextView);
         mArtistListFragment = new ArtistListFragment();
-        getFragmentManager().beginTransaction().
-                add(R.id.artistFragmentContainer, mArtistListFragment).commit();
+
+        if(findViewById(R.id.trackFragmentContainer)==null){
+            mTwoPane = false;
+        } else{
+            mTwoPane = true;
+        }
+        //getFragmentManager().beginTransaction().
+          //      add(R.id.artistFragmentContainer, mArtistListFragment).commit();
 
         mArtistSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -57,7 +65,11 @@ public class MainActivity extends ActionBarActivity implements View.OnFocusChang
             public void afterTextChanged(Editable s) throws NullPointerException {
                 getArtistResults();
                 if (mArtistSearch.getText().toString().isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Enter new search", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Enter new search", Toast.LENGTH_SHORT).show();
+                    getFragmentManager().beginTransaction().remove(mArtistListFragment);
+                }else{
+                    getFragmentManager().beginTransaction().
+                            replace(R.id.artistFragmentContainer, mArtistListFragment).commit();
                 }
             }
         });

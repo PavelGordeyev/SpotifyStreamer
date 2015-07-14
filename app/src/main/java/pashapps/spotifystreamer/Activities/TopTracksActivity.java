@@ -1,5 +1,6 @@
 package pashapps.spotifystreamer.Activities;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ public class TopTracksActivity extends ActionBarActivity {
 
     private String mArtistID;
     private TrackListFragment mTrackListFragment;
+    private FragmentTransaction mFragmentTransaction;
     private static final String TRACKS = "TRACKS";
     private Tracks mTracksResults;
     private String mArtistName;
@@ -41,10 +43,11 @@ public class TopTracksActivity extends ActionBarActivity {
 
         setTitle("Top 10 Tracks");
 
+
         mTrackListFragment = new TrackListFragment();
+
         getFragmentManager().beginTransaction().
                 add(R.id.trackFragmentContainer, mTrackListFragment).commit();
-
         Bundle bundle;
         Intent intent = getIntent();
         bundle = intent.getExtras();
@@ -55,7 +58,7 @@ public class TopTracksActivity extends ActionBarActivity {
         getTracksResults();
     }
 
-    private void getTracksResults(){
+    public void getTracksResults(){
 
         SpotifyApi api = new SpotifyApi();
         final SpotifyService spotifyService = api.getService();
@@ -84,6 +87,7 @@ public class TopTracksActivity extends ActionBarActivity {
                 mTracksResults = tracks;
                 mTrackListFragment.setResults(setTracksList());
 
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -107,14 +111,14 @@ public class TopTracksActivity extends ActionBarActivity {
             for(int i = 0;i<size;i++){
                 TracksP tracksP = new TracksP();
                 tracksP.setAlbumName(mTracksResults.tracks.get(i).album.name);
-                tracksP.setTrackName(mTracksResults.tracks.get(i).name);
-                tracksP.setPreviewURL(mTracksResults.tracks.get(i).preview_url);
                 tracksP.setArtistName(mArtistName);
+                tracksP.setTrackName(mTracksResults.tracks.get(i).name);
                 try {
                     tracksP.setAlbumImageID(mTracksResults.tracks.get(i).album.images.get(0).url);
                 } catch (IndexOutOfBoundsException iob){
                     Log.d("NO_IMAGE",iob.toString());
                 }
+                tracksP.setPreviewURL(mTracksResults.tracks.get(i).preview_url);
 
                 tracksPs[i] = tracksP;
             }
@@ -124,6 +128,7 @@ public class TopTracksActivity extends ActionBarActivity {
 
         return tracksPs;
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -141,6 +146,7 @@ public class TopTracksActivity extends ActionBarActivity {
 
         if(id == android.R.id.home) {
             NavUtils.navigateUpFromSameTask(this);
+            mFragmentTransaction = getFragmentManager().beginTransaction().remove(mTrackListFragment);
             return true;
         }
 
