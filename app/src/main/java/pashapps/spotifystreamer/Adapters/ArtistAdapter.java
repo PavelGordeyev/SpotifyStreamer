@@ -12,11 +12,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
-
-import kaaes.spotify.webapi.android.models.Artist;
-import kaaes.spotify.webapi.android.models.ArtistsPager;
 import pashapps.spotifystreamer.ArtistP;
+import pashapps.spotifystreamer.Fragments.ArtistListFragment;
 import pashapps.spotifystreamer.R;
 
 /**
@@ -72,13 +69,22 @@ public class ArtistAdapter extends BaseAdapter{
             holder = (ViewHolder) convertView.getTag();
         }
 
+
+        if(position == ArtistListFragment.selected){
+            convertView.setBackgroundColor(Color.parseColor("#FFA500"));
+        } else{
+            convertView.setBackgroundColor(Color.parseColor("#EEEEEE"));
+        }
+
         if(mResults!=null) {
             holder.artistLabel.setText(mResults[position].getName());
             try {
                 Log.d("IMAGE", mResults[position].getArtistID());
                 Picasso.with(mContext).load(mResults[position].getImageID()).into(holder.artistImageView);
             } catch(IndexOutOfBoundsException npe) {
+                Picasso.with(mContext).load(R.drawable.image_unavailable).into(holder.artistImageView);
                 Log.d("IMAGE_ERR", npe.toString());
+
             }
             return convertView;
         } else{

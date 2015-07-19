@@ -3,7 +3,6 @@ package pashapps.spotifystreamer.Fragments;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +25,7 @@ public class ArtistListFragment extends Fragment {
     private ArtistP[] mResults;
     private String mArtistID;
     private String mArtistName;
+    public static int selected = -1;
 
 
     public static final String ARTISTID = "ARTIST ID";
@@ -54,11 +54,11 @@ public class ArtistListFragment extends Fragment {
                 mArtistName = mResults[position].getName();
 
                 if(MainActivity.mTwoPane){
-                    TopTracksActivity topTracksActivity = new TopTracksActivity();
-                    topTracksActivity.getTracksResults();
-                    //TrackListFragment trackListFragment = new TrackListFragment();
-                    //trackListFragment.setResults(topTracksActivity.getTracksResults());
-                    //getFragmentManager().beginTransaction().add(R.id.trackFragmentContainer,trackListFragment);
+                    TrackListFragment trackListFragment = new TrackListFragment();
+                    trackListFragment.setVals(mArtistID,mArtistName);
+                    selected = position;
+                    mAdapter.notifyDataSetChanged();
+                    getFragmentManager().beginTransaction().replace(R.id.trackFragmentContainer,trackListFragment).commit();
                 }else {
                     Intent intent = new Intent(getActivity(), TopTracksActivity.class);
                     intent.putExtra(ARTISTID, mArtistID);

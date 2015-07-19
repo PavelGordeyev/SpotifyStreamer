@@ -1,7 +1,7 @@
 package pashapps.spotifystreamer.Fragments;
 
-import android.app.Fragment;
-import android.media.AudioManager;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,17 +15,13 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
 
-import butterknife.InjectView;
-import kaaes.spotify.webapi.android.models.Image;
 import pashapps.spotifystreamer.R;
 import pashapps.spotifystreamer.TracksP;
 
 
-public class TrackPlayerFragment extends Fragment{
+public class TrackPlayerFragment extends DialogFragment {
 
     private TextView mArtistLabel;
     private TextView mAlbumLabel;
@@ -178,14 +174,21 @@ public class TrackPlayerFragment extends Fragment{
         return view;
     }
 
+    /** The system calls this only when creating the layout in a dialog. */
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        // The only reason you might override this method when using onCreateView() is
+        // to modify any dialog characteristics. For example, the dialog includes a
+        // title by default, but your custom layout might not need it. So here you can
+        // remove the dialog title, but you must call the superclass to get the Dialog.
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        return dialog;
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
-        //updateFragment(mTracksPs,mPosition);
-        /*if(savedInstanceState==null) {
-            getFragmentManager().beginTransaction().add(R.id.trackPlayerContainer, this).commit();
-        }*/
     }
 
     public void updateFragment(TracksP[] tracks,int position){
@@ -291,5 +294,6 @@ public class TrackPlayerFragment extends Fragment{
         mCurrentTimeLabel.setText(timeConvert(mp.getCurrentPosition()));
         mHandler.postDelayed(mSeekBarRunnable,1000);
     }
+
 
 }

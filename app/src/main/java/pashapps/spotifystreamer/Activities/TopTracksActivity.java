@@ -1,29 +1,16 @@
 package pashapps.spotifystreamer.Activities;
 
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import kaaes.spotify.webapi.android.SpotifyApi;
-import kaaes.spotify.webapi.android.SpotifyCallback;
-import kaaes.spotify.webapi.android.SpotifyError;
-import kaaes.spotify.webapi.android.SpotifyService;
-import kaaes.spotify.webapi.android.models.Tracks;
 import pashapps.spotifystreamer.Fragments.ArtistListFragment;
 import pashapps.spotifystreamer.Fragments.TrackListFragment;
 import pashapps.spotifystreamer.R;
-import pashapps.spotifystreamer.TracksP;
-import retrofit.client.Response;
 
 
 public class TopTracksActivity extends ActionBarActivity {
@@ -31,8 +18,6 @@ public class TopTracksActivity extends ActionBarActivity {
     private String mArtistID;
     private TrackListFragment mTrackListFragment;
     private FragmentTransaction mFragmentTransaction;
-    private static final String TRACKS = "TRACKS";
-    private Tracks mTracksResults;
     private String mArtistName;
 
 
@@ -46,89 +31,17 @@ public class TopTracksActivity extends ActionBarActivity {
 
         mTrackListFragment = new TrackListFragment();
 
-        getFragmentManager().beginTransaction().
-                add(R.id.trackFragmentContainer, mTrackListFragment).commit();
         Bundle bundle;
         Intent intent = getIntent();
         bundle = intent.getExtras();
         mArtistID = bundle.get(ArtistListFragment.ARTISTID) + "";
         mArtistName = bundle.get(ArtistListFragment.ARTISTNAME) +"";
+        mTrackListFragment.setVals(mArtistID,mArtistName);
+
+        getFragmentManager().beginTransaction().
+                add(R.id.trackFragmentContainer, mTrackListFragment).commit();
         getSupportActionBar().setSubtitle(mArtistName);
-
-        getTracksResults();
     }
-
-    public void getTracksResults(){
-
-        SpotifyApi api = new SpotifyApi();
-        final SpotifyService spotifyService = api.getService();
-
-        Map<String,Object> options= new HashMap<>();
-        options.put("country", "US");
-
-
-        spotifyService.getArtistTopTrack(mArtistID, options, new SpotifyCallback<Tracks>() {
-            @Override
-            public void failure(SpotifyError spotifyError) {
-                Log.d(TRACKS, spotifyError.toString());
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mTrackListFragment.updateFragment(0);
-                        Context context = getApplicationContext();
-                        Toast.makeText(context, "Tracks not found...Please try again", Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-
-            @Override
-            public void success(Tracks tracks, Response response) {
-                mTracksResults = tracks;
-                mTrackListFragment.setResults(setTracksList());
-
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        getFragmentManager().beginTransaction().
-                                replace(R.id.trackFragmentContainer, mTrackListFragment).commit();
-                        mTrackListFragment.updateFragment(1);
-                    }
-                });
-
-            }
-        });
-    }
-
-    private TracksP[] setTracksList(){
-        TracksP[] tracksPs;
-
-        if(mTracksResults!=null){
-            int size  = mTracksResults.tracks.size();
-            tracksPs = new TracksP[size];
-
-            for(int i = 0;i<size;i++){
-                TracksP tracksP = new TracksP();
-                tracksP.setAlbumName(mTracksResults.tracks.get(i).album.name);
-                tracksP.setArtistName(mArtistName);
-                tracksP.setTrackName(mTracksResults.tracks.get(i).name);
-                try {
-                    tracksP.setAlbumImageID(mTracksResults.tracks.get(i).album.images.get(0).url);
-                } catch (IndexOutOfBoundsException iob){
-                    Log.d("NO_IMAGE",iob.toString());
-                }
-                tracksP.setPreviewURL(mTracksResults.tracks.get(i).preview_url);
-
-                tracksPs[i] = tracksP;
-            }
-        } else{
-            tracksPs = null;
-        }
-
-        return tracksPs;
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

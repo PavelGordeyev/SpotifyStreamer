@@ -17,7 +17,7 @@ import pashapps.spotifystreamer.R;
 import pashapps.spotifystreamer.TracksP;
 
 
-public class TrackPreviewPlayer extends ActionBarActivity {
+public class TrackPreviewPlayerActivity extends ActionBarActivity {
 
     private TrackPlayerFragment mTrackPlayerFragment;
     private int position;
@@ -46,9 +46,6 @@ public class TrackPreviewPlayer extends ActionBarActivity {
             //ft.addToBackStack(null);
             ft.commit();
         }
-            //getFragmentManager().beginTransaction().
-                   // add(R.id.trackPlayerContainer, mTrackPlayerFragment).commit();
-
     }
 
     @Override

@@ -1,6 +1,5 @@
 package pashapps.spotifystreamer.Activities;
 
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -47,8 +46,6 @@ public class MainActivity extends ActionBarActivity implements View.OnFocusChang
         } else{
             mTwoPane = true;
         }
-        //getFragmentManager().beginTransaction().
-          //      add(R.id.artistFragmentContainer, mArtistListFragment).commit();
 
         mArtistSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -58,7 +55,6 @@ public class MainActivity extends ActionBarActivity implements View.OnFocusChang
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //getArtistResults();
             }
 
             @Override
@@ -152,7 +148,6 @@ public class MainActivity extends ActionBarActivity implements View.OnFocusChang
                 artistP.setName(mArtistResults.artists.items.get(i).name);
                 artistP.setArtistID(mArtistResults.artists.items.get(i).id);
                 try {
-                    //int imagesSize = mArtistResults.artists.items.get(i).images.size();
                     artistP.setImageID(mArtistResults.artists.items.get(i).images.get(0).url);
                 } catch(IndexOutOfBoundsException iob){
                     Log.d("NO_IMAGE",iob.toString());

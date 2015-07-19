@@ -9,18 +9,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/trackLabel"
-        android:layout_marginTop="33dp"
+        android:layout_marginTop="30dp"
         android:layout_marginLeft="125dp"
         tools:text="Otherside"
         android:textSize="16sp"/>
 
     <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:id="@+id/albumImageView"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:paddingBottom="10dp"
         android:background="@android:color/transparent"
         android:adjustViewBounds="true"/>
 
@@ -31,6 +31,6 @@
         android:id="@+id/albumLabel"
         android:layout_below="@+id/trackLabel"
         android:layout_alignStart="@+id/trackLabel"
-        android:textSize="14sp"
+        android:textSize="11sp"
         tools:text="Californication"/>
 </RelativeLayout>

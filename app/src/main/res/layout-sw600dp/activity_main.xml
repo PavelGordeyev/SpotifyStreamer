@@ -28,6 +28,14 @@
         android:layout_below="@+id/searchEditTextView">
 
     </FrameLayout>
+    <View
+        android:layout_width="3dp"
+        android:layout_height="fill_parent"
+        android:layout_toRightOf="@id/artistFragmentContainer"
+        android:id="@+id/separator"
+        android:visibility="visible"
+        android:background="@android:color/darker_gray"
+        android:layout_marginLeft="20dp"/>
 
     <FrameLayout
         android:layout_width="400dp"
@@ -35,7 +43,8 @@
         android:id="@+id/trackFragmentContainer"
         android:layout_below="@+id/searchEditTextView"
         android:layout_toEndOf="@id/artistFragmentContainer"
-        android:layout_toRightOf="@id/artistFragmentContainer">
+        android:layout_toRightOf="@id/separator"
+        android:layout_marginLeft="20dp">
 
     </FrameLayout>
 
