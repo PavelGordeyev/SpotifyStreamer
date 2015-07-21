@@ -7,8 +7,7 @@
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 tools:context=".MainActivity"
-                android:background="#EEEEEE"
-                android:orientation="horizontal">
+                android:background="#EEEEEE">
 
     <EditText
         android:layout_width="400dp"
@@ -21,31 +20,45 @@
         android:singleLine="true"
         android:maxLines="1"/>
 
-    <FrameLayout
-        android:layout_width="400dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/artistFragmentContainer"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/searchEditTextView">
 
-    </FrameLayout>
-    <View
-        android:layout_width="3dp"
-        android:layout_height="fill_parent"
-        android:layout_toRightOf="@id/artistFragmentContainer"
-        android:id="@+id/separator"
-        android:visibility="visible"
-        android:background="@android:color/darker_gray"
-        android:layout_marginLeft="20dp"/>
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/artistFragmentContainer"
+            android:layout_below="@+id/searchEditTextView"
+            android:layout_weight="1">
 
-    <FrameLayout
-        android:layout_width="400dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/trackFragmentContainer"
-        android:layout_below="@+id/searchEditTextView"
-        android:layout_toEndOf="@id/artistFragmentContainer"
-        android:layout_toRightOf="@id/separator"
-        android:layout_marginLeft="20dp">
+        </FrameLayout>
+        <View
+            android:layout_width="3dp"
+            android:layout_height="fill_parent"
+            android:layout_toRightOf="@id/artistFragmentContainer"
+            android:id="@+id/separator"
+            android:visibility="visible"
+            android:background="@android:color/darker_gray"
+            android:layout_marginLeft="20dp"/>
 
-    </FrameLayout>
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/trackFragmentContainer"
+            android:layout_below="@+id/searchEditTextView"
+            android:layout_toEndOf="@id/artistFragmentContainer"
+            android:layout_toRightOf="@id/separator"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1">
+
+        </FrameLayout>
+
+
+    </LinearLayout>
 
 </RelativeLayout>
